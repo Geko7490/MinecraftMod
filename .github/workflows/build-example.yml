@@ -29,6 +29,8 @@ jobs:
           test -n "$VERSION"
           echo "VERSION=$VERSION" >> "$GITHUB_ENV"
           cp "target/horizon-mod/ruby.hmod" "target/horizon-mod/ruby-$VERSION.hmod"
+          mkdir -p .release-assets
+          cp "target/horizon-mod/ruby-$VERSION.hmod" .release-assets/
           if gh release view "v$VERSION" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
             gh release upload "v$VERSION" "target/horizon-mod/ruby-$VERSION.hmod" --repo "$GITHUB_REPOSITORY" --clobber
           else
@@ -41,7 +43,7 @@ jobs:
         env:
           GITHUB_REF_NAME: v${{ env.VERSION }}
           RELEASE_BODY: "Ruby example mod release."
-          RELEASE_ASSETS: target/horizon-mod
+          RELEASE_ASSETS: .release-assets
         run: |
           python scripts/publish_release.py
           python -m json.tool catalog/mods.json > /dev/null
