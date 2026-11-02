@@ -4,9 +4,12 @@
   "description": "Adds a ruby gem and a ruby block with crafting recipes.",
   "developer": "Geko7490",
   "type": "hmod",
+  "category": "items",
+  "featured": false,
+  "tags": ["ruby", "items", "blocks"],
+  "screenshots": [],
+  "icon": null,
   "license": "MIT",
   "source": "https://github.com/Geko7490/MinecraftMod",
-  "game_versions": [
-    "26.3"
-  ]
+  "game_versions": ["26.3"]
 }

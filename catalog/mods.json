@@ -8,19 +8,19 @@
       "description": "Adds a ruby gem and a ruby block with crafting recipes.",
       "developer": "Geko7490",
       "type": "hmod",
+      "category": "items",
+      "featured": false,
+      "tags": ["ruby", "items", "blocks"],
+      "screenshots": [],
       "icon": null,
       "source": "https://github.com/Geko7490/MinecraftMod",
       "versions": [
         {
           "version": "0.1.0",
-          "game_versions": [
-            "26.3"
-          ],
+          "game_versions": ["26.3"],
           "api": "0.2",
           "side": "both",
-          "capabilities": [
-            "registries"
-          ],
+          "capabilities": ["registries"],
           "download_url": "https://github.com/Geko7490/MinecraftMod/releases/download/v0.1.0/ruby-0.1.0.hmod",
           "file_name": "ruby-0.1.0.hmod",
           "size": 3688,

@@ -1,60 +1,34 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/Geko7490/MinecraftMod/main/schemas/mod-metadata.schema.json",
   "title": "MinecraftMod mod metadata",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "id",
-    "name",
-    "description",
-    "developer",
-    "type",
-    "source",
-    "license"
-  ],
+  "required": ["id", "name", "description", "developer", "type", "source", "license"],
   "properties": {
-    "id": {
-      "type": "string",
-      "pattern": "^[a-z0-9_]{1,64}$"
+    "id": { "type": "string", "pattern": "^[a-z0-9_]{1,64}$" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+    "description": { "type": "string", "maxLength": 1200 },
+    "developer": { "type": "string", "minLength": 1, "maxLength": 120 },
+    "type": { "const": "hmod" },
+    "category": { "type": "string", "pattern": "^[a-z0-9_-]{1,48}$" },
+    "featured": { "type": "boolean" },
+    "tags": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1, "maxLength": 32 }
     },
-    "name": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 120
+    "screenshots": {
+      "type": "array",
+      "items": { "type": "string", "format": "uri", "pattern": "^https://" }
     },
-    "description": {
-      "type": "string",
-      "maxLength": 1200
-    },
-    "developer": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 120
-    },
-    "type": {
-      "const": "hmod"
-    },
-    "icon": {
-      "type": [
-        "string",
-        "null"
-      ],
-      "format": "uri"
-    },
-    "source": {
-      "type": "string",
-      "format": "uri"
-    },
+    "icon": { "type": ["string", "null"], "format": "uri" },
+    "source": { "type": "string", "format": "uri", "pattern": "^https://" },
     "game_versions": {
       "type": "array",
-      "items": {
-        "type": "string"
-      }
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
     },
-    "license": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 80
-    }
+    "license": { "type": "string", "minLength": 1, "maxLength": 80 }
   }
 }
