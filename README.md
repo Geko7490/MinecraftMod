@@ -2,7 +2,7 @@
 
 Official **.hmod** content-mod catalogue for Geko7490's Horizon Android Minecraft build.
 
-**Supported:** Horizon .hmod content packages only. **Not supported:** Fabric/Forge/NeoForge Java .jar mods or native .hnmod bundles.
+**Supported:** Horizon .hmod content packages, including data-driven blocks, items, mob effects, entity types (currently snowball-based thrown projectiles), menus, recipes and resource assets. **Not supported:** Fabric/Forge/NeoForge Java .jar mods or native .hnmod bundles in this catalogue.
 
 ## Official catalogue endpoints
 
@@ -21,7 +21,11 @@ Open Horizon Android → Mods to browse, inspect and install official HMOD conte
 
 Create a content mod, build its .hmod, add metadata at **mods/<id>/mod.json**, and publish a GitHub Release asset named **<id>-<version>.hmod**. The release workflow validates the package, calculates SHA-256 and exact size, preserves earlier versions, and updates **catalog/mods.json**.
 
-See [Modding guide](docs/MODDING.md), [Publishing guide](docs/PUBLISHING.md), and [Ruby example](examples/ruby-content/).
+See [Modding guide](docs/MODDING.md), [Publishing guide](docs/PUBLISHING.md), [Ruby content example](examples/ruby-content/), and [Vex Spark entity example](examples/vex-spark/).
+
+### Entity types
+
+Horizon content API 0.2 can register a custom entity type by copying the supported `minecraft:snowball` thrown-projectile template and binding it to one of the mod's own items. The item throws the entity; it uses the item's model and can set hit damage. This is a projectile registry feature, **not** a general living-mob/AI API. See [Vex Spark](examples/vex-spark/).
 
 Maximum package size: 64 MiB. Downloads are restricted to GitHub Release assets in this repository and pinned by SHA-256 and exact byte size.
 
