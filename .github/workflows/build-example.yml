@@ -40,11 +40,11 @@ jobs:
               --notes "Example Horizon Android content mod. SHA-256 and package metadata are indexed automatically."
           fi
       - name: Generate catalogue from the published asset
-        env:
-          GITHUB_REF_NAME: v${{ env.VERSION }}
-          RELEASE_BODY: "Ruby example mod release."
-          RELEASE_ASSETS: .release-assets
         run: |
+          test -n "$VERSION"
+          export GITHUB_REF_NAME="v$VERSION"
+          export RELEASE_BODY="Ruby example mod release."
+          export RELEASE_ASSETS=".release-assets"
           python scripts/publish_release.py
           python -m json.tool catalog/mods.json > /dev/null
       - name: Commit catalogue
