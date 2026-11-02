@@ -36,7 +36,11 @@ jobs:
               assert re.fullmatch(r"[a-z0-9_]{1,64}", mod["id"])
               assert mod["id"] not in ids
               ids.add(mod["id"])
-              assert mod["type"] == "hmod"
+              assert mod["type"] == "hmod" and mod["license"]
+              for version in mod["versions"]:
+                  assert version["api"] in {"0.1", "0.2", "0.3"}
+                  assert version["side"] in {"client", "server", "both"}
+                  assert isinstance(version["capabilities"], list)
               for version in mod["versions"]:
                   assert re.fullmatch(r"[a-f0-9]{64}", version["sha256"])
                   assert version["size"] > 0

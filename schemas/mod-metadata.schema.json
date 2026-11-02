@@ -9,7 +9,8 @@
     "description",
     "developer",
     "type",
-    "source"
+    "source",
+    "license"
   ],
   "properties": {
     "id": {
@@ -49,6 +50,11 @@
       "items": {
         "type": "string"
       }
+    },
+    "license": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
     }
   }
 }

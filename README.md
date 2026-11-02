@@ -1,39 +1,19 @@
 # MinecraftMod
 
-Independent catalog and release repository for Horizon Android content mods.
+Community catalogue for Geko7490's Horizon Android build. The in-game Mods browser reads this repository and installs Horizon content mods.
 
-## Supported package format
+**Supported:** `.hmod` content packages only. **Not supported:** Fabric/Forge/NeoForge Java `.jar` mods or native `.hnmod` bundles.
 
-This repository publishes **Horizon content mods** (.hmod). A package is a ZIP archive containing
-horizon-mod.toml and, when needed, assets/ and data/. The manifest must use an API supported by
-the target Horizon build. The package is data-driven; it is not a Java/Fabric/Forge mod.
+- [Modding guide](docs/MODDING.md)
+- [Ruby example](examples/ruby-content/)
+- [Catalogue JSON](catalog/mods.json)
 
-- .hmod: content mod; validate with Horizon's horizon_mods::Package::read / cargo horizon-mod check.
-- .hnmod: native Rust mixin bundle; not accepted by this catalog or Android's current installer.
-- Resource packs are not mods and should be published through a separate resource-pack catalog entry/provider.
+## Players
+Open Horizon Android → Mods, search, inspect details and press Install. The client checks file size and SHA-256 before installing. Use Options → Mods to enable/disable; restart after changing content mods.
 
-See the upstream [Horizon mod documentation](https://github.com/Vasysik/horizon-android/blob/android/docs/mods.md).
+## Developers
+Create a Horizon content mod, build and check its `.hmod`, add `mods/<id>/mod.json`, then publish a GitHub Release with asset `<id>-<version>.hmod`. Actions validates the package and updates `catalog/mods.json`. A source folder alone is not listed.
 
-## Adding a mod
+See [docs/MODDING.md](docs/MODDING.md) and [examples/ruby-content](examples/ruby-content/).
 
-1. Add mods/<id>/mod.json using the metadata shape described by schemas/mod-metadata.schema.json.
-2. Build a real .hmod with the Horizon SDK. Do not fabricate a package or claim unsupported capabilities.
-3. Create a GitHub Release and attach the package as <id>-<version>.hmod.
-4. The release workflow validates the embedded horizon-mod.toml, calculates SHA-256 and file size, and updates catalog/mods.json.
-
-The catalog is published as a raw GitHub file at:
-
-https://raw.githubusercontent.com/Geko7490/MinecraftMod/main/catalog/mods.json
-
-Downloads use immutable GitHub Release asset URLs. Clients must verify the catalog SHA-256 and size before passing a package to Horizon's existing import/validation path.
-
-## Repository layout
-
-- catalog/mods.json
-- schemas/mod-catalog.schema.json
-- schemas/mod-metadata.schema.json
-- mods/<id>/mod.json
-- scripts/publish_release.py
-- .github/workflows/catalog.yml
-
-No sample binary is included: a mod is listed only after a valid release asset exists.
+Maximum package size: 64 MiB. Downloads are restricted to GitHub Release assets in this repository and pinned by SHA-256 and exact byte size.

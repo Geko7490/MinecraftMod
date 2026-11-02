@@ -89,7 +89,10 @@
         "file_name",
         "size",
         "sha256",
-        "published"
+        "published",
+        "api",
+        "side",
+        "capabilities"
       ],
       "properties": {
         "version": {
@@ -127,6 +130,42 @@
         },
         "changelog": {
           "type": "string"
+        },
+        "api": {
+          "type": "string",
+          "enum": [
+            "0.1",
+            "0.2",
+            "0.3"
+          ]
+        },
+        "side": {
+          "type": "string",
+          "enum": [
+            "client",
+            "server",
+            "both"
+          ]
+        },
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "game-read",
+              "chat",
+              "hud",
+              "storage",
+              "command",
+              "registries",
+              "ui",
+              "render",
+              "input",
+              "players",
+              "world",
+              "recipes"
+            ]
+          }
         }
       }
     }
