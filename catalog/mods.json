@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated": "2026-11-02T18:26:33.604117Z",
+  "generated": "2026-11-02T18:27:12.574323Z",
   "mods": [
     {
       "id": "ruby",
@@ -21,11 +21,11 @@
           "capabilities": [
             "registries"
           ],
-          "download_url": "https://github.com/Geko7490/MinecraftMod/releases/download/main/ruby-0.1.0.hmod",
+          "download_url": "https://github.com/Geko7490/MinecraftMod/releases/download/v0.1.0/ruby-0.1.0.hmod",
           "file_name": "ruby-0.1.0.hmod",
           "size": 3688,
-          "sha256": "1740faca8cea3d6d8287b5cb311f7fc91121ae32c627fb584a6bb64fd0d3eb91",
-          "published": "2026-11-02T18:26:33.604101Z",
+          "sha256": "45411bc14ba5f16c6ecd3d9f47723713294e47ee9fd44c58e8541594f48b9e73",
+          "published": "2026-11-02T18:27:12.574304Z",
           "changelog": "Ruby example mod release."
         }
       ],
