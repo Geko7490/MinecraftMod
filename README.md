@@ -45,6 +45,7 @@ python scripts/validate_catalog.py
 ~~~
 
 The builder checks the EntityType kind, supported template, projectile item ownership and uniqueness, living attribute allowlist and numeric values, ZIP integrity, and package size. The game runtime still needs in-game testing for actual spawning and behaviour.
+Successful catalogue validation runs also upload the generated example packages as the `horizon-example-hmods` Actions artifact for 30 days.
 
 ## Catalogue compatibility
 
