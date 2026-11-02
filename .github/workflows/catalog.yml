@@ -1,0 +1,77 @@
+name: Validate and publish mod catalog
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  release:
+    types: [published]
+permissions:
+  contents: write
+concurrency:
+  group: mod-catalog-${{ github.event.release.tag_name || github.ref }}
+  cancel-in-progress: false
+jobs:
+  validate:
+    if: github.event_name != 'release'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m json.tool catalog/mods.json > /dev/null
+      - run: python -m py_compile scripts/publish_release.py
+      - name: Validate metadata and catalog contracts
+        run: |
+          python - <<'PY'
+          import json, pathlib, re
+          catalog=json.loads(pathlib.Path("catalog/mods.json").read_text())
+          assert catalog["schema"] == 1
+          assert isinstance(catalog["mods"], list)
+          ids=set()
+          for mod in catalog["mods"]:
+              assert re.fullmatch(r"[a-z0-9_]{1,64}", mod["id"])
+              assert mod["id"] not in ids
+              ids.add(mod["id"])
+              assert mod["type"] == "hmod"
+              for version in mod["versions"]:
+                  assert re.fullmatch(r"[a-f0-9]{64}", version["sha256"])
+                  assert version["size"] > 0
+                  assert version["download_url"].startswith("https://github.com/Geko7490/MinecraftMod/releases/download/")
+          for path in pathlib.Path("mods").glob("*/mod.json"):
+              meta=json.loads(path.read_text())
+              assert meta["id"] == path.parent.name
+              assert meta["type"] == "hmod"
+          PY
+  release:
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release download "${{ github.event.release.tag_name }}" --dir .release-assets --pattern '*.hmod'
+      - name: Generate catalog entries and hashes
+        env:
+          GITHUB_REF_NAME: ${{ github.event.release.tag_name }}
+          RELEASE_BODY: ${{ github.event.release.body }}
+          RELEASE_ASSETS: .release-assets
+        run: python scripts/publish_release.py
+      - name: Commit catalog
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add catalog/mods.json
+          git diff --cached --quiet || git commit -m "chore(catalog): publish ${{ github.event.release.tag_name }}"
+          git push
