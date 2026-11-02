@@ -34,6 +34,8 @@ jobs:
         run: python scripts/build_hmod.py --source examples/ruby-content --output target/horizon-mod/ruby.hmod
       - name: Build and validate Vex Spark entity example
         run: python scripts/build_hmod.py --source examples/vex-spark --output target/horizon-mod/vex_spark.hmod
+      - name: Build and validate Vex Sentinel living entity example
+        run: python scripts/build_hmod.py --source examples/vex-sentinel --output target/horizon-mod/vex_sentinel.hmod
 
   publish:
     if: github.event_name == 'release'

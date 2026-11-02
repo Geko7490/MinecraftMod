@@ -42,9 +42,13 @@ capabilities = ["registries"]
 
 ID küçük harf/rakam/alt çizgi, 1–64 karakter olmalı. api = "0.2" content API'sidir. `registries` blok, eşya, mob effect, entity type ve menü kayıtlarını açar.
 
-## 5. Entity type (fırlatılabilir entity)
+## 5. Entity API
 
-Horizon'ın mevcut content EntityType API'si özel bir entity türünü, desteklenen bir vanilla projectile şablonundan kaydeder. Şu an desteklenen tek şablon `minecraft:snowball`'dır. Entity tanımı `data/<id>/horizon/entity_type/<name>.json` altında bulunur:
+Entity tanımı `data/<id>/horizon/entity_type/<name>.json` altında bulunur.
+
+### Projectile (geriye dönük uyumlu)
+
+`kind` yazılmazsa `projectile` varsayılır. Şu an yalnızca `minecraft:snowball` şablonu desteklenir:
 
 ~~~json
 {
@@ -54,13 +58,44 @@ Horizon'ın mevcut content EntityType API'si özel bir entity türünü, destekl
 }
 ~~~
 
-- `template`: şu an yalnızca `minecraft:snowball`.
-- `item`: aynı modun `data/<id>/horizon/item/` altında kaydettiği bir eşya. Bir eşya yalnızca tek entity türüne bağlanabilir.
-- `damage`: çarpışmada hedefe verilecek thrown hasarı; varsayılan 0, negatif veya sonlu olmayan değerler reddedilir.
-- Entity adı `entity.<mod_id>.<name>` çeviri anahtarıyla `assets/<id>/lang/en_us.json` içinde tanımlanır.
-- Entity, bağlı eşyanın item modelini kullanır; eşya kullanıldığında snowball gibi fırlatılır. `/summon <mod_id>:<name>` ile de çağrılabilir.
+Modun kendi item'ı projectile'ı fırlatır; bir item yalnızca tek entity türüne bağlanabilir.
 
-**Sınırlar:** Bu bir yaşayan mob API'si değildir. Özel AI, hedef seçme, pathfinding, animasyon controller, model iskeleti, özel tick/event callback, dispenser davranışı veya özel entity sınıfı sağlamaz. Bunlar için native/engine tarafında yeni hook'lar gerekir. Detay ve çalışan paket örneği: [Vex Spark](../examples/vex-spark/).
+### Living entity archetype
+
+`kind: "living"` ile yeni bir entity ID'si oluşturulur ve desteklenen vanilla mob şablonlarından birinin davranışı, modeli, animasyonu ve sesleri yeniden kullanılır:
+
+- `minecraft:zombie`
+- `minecraft:skeleton`
+- `minecraft:cow`
+- `minecraft:pig`
+- `minecraft:sheep`
+- `minecraft:chicken`
+- `minecraft:spider`
+- `minecraft:creeper`
+- `minecraft:wolf`
+- `minecraft:iron_golem`
+
+Örnek:
+
+~~~json
+{
+  "kind": "living",
+  "template": "minecraft:zombie",
+  "attributes": {
+    "minecraft:max_health": 40.0,
+    "minecraft:movement_speed": 0.31,
+    "minecraft:attack_damage": 7.0,
+    "minecraft:follow_range": 32.0,
+    "minecraft:armor": 4.0
+  }
+}
+~~~
+
+Desteklenen attribute alanları: `minecraft:max_health`, `minecraft:movement_speed`, `minecraft:attack_damage`, `minecraft:armor`, `minecraft:armor_toughness`, `minecraft:knockback_resistance`, `minecraft:follow_range`, `minecraft:jump_strength`, `minecraft:flying_speed`.
+
+Living entity'ler henüz spawn egg kullanmaz; `/summon <mod_id>:<name>` ile çağrılır. İsim `entity.<mod_id>.<name>` dil anahtarıyla çevrilir. Örnek: [Vex Sentinel](../examples/vex-sentinel/).
+
+**API sınırı:** Bu, vanilla archetype tabanlı yaşayan entity API'sidir; tamamen yeni AI API'si değildir. Modlar henüz kendi goal sınıflarını, hedef seçicilerini, pathfinding algoritmalarını, tick/event callback'lerini, model iskeletlerini veya animasyon controller'larını tanımlayamaz. Entity seçtiği vanilla template'in AI ve görsel davranışını kullanır.
 
 ## 6. Katalog metadata
 
