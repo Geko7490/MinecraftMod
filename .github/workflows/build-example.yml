@@ -1,0 +1,42 @@
+name: Build example Ruby mod
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish (must match horizon-mod.toml)"
+        required: true
+        default: "0.1.0"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install Horizon mod tool
+        run: cargo install --git https://github.com/Geko7490/Minecraft --branch android cargo-horizon-mod
+      - name: Build example
+        working-directory: examples/ruby-content
+        run: cargo horizon-mod build
+      - name: Validate package
+        working-directory: examples/ruby-content
+        run: cargo horizon-mod check target/horizon-mod/ruby.hmod
+      - name: Prepare release asset
+        working-directory: examples/ruby-content
+        env:
+          VERSION: ${{ inputs.version }}
+        run: cp target/horizon-mod/ruby.hmod target/horizon-mod/ruby-${VERSION}.hmod
+      - name: Publish GitHub Release
+        working-directory: examples/ruby-content
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          gh release create "v${VERSION}" "target/horizon-mod/ruby-${VERSION}.hmod" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "Ruby ${VERSION}" \
+            --notes "Example Horizon Android content mod. SHA-256 and package metadata are indexed automatically."

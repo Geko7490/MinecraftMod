@@ -108,4 +108,4 @@ gh release create v0.1.0 target/horizon-mod/ruby-0.1.0.hmod \
 
 Release **published** olunca Actions manifesti doğrular, API/side/capabilities bilgisini alır, dosya boyutu ve SHA-256 hesaplar ve `catalog/mods.json` dosyasını günceller. Başarısız doğrulama yayınlanmaz.
 
-Yeni sürümde manifestteki `version` değerini artır, yeniden derle ve yeni GitHub Release yayımla.
+Yeni sürümde manifestteki `version` değerini artır, yeniden derle ve yeni GitHub Release yayımla. İlk örnek sürümü için **Actions → Build example Ruby mod** iş akışını çalıştırabilirsin; yayınlanan Release otomatik olarak kataloğa eklenir.
