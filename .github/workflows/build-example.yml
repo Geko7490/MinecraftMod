@@ -1,11 +1,16 @@
 name: Build and publish example Ruby mod
+
 on:
   push:
     branches: [main]
     paths:
       - "examples/ruby-content/horizon-mod.toml"
+      - ".github/workflows/build-example.yml"
+      - "scripts/publish_release.py"
+
 permissions:
   contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,14 +21,34 @@ jobs:
           python-version: '3.12'
       - name: Build and validate example
         run: python scripts/build_hmod.py
-      - name: Publish release asset
+      - name: Publish or update release asset
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           VERSION="$(python -c 'import tomllib; print(tomllib.load(open("examples/ruby-content/horizon-mod.toml", "rb"))["version"])')"
           test -n "$VERSION"
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
           cp "target/horizon-mod/ruby.hmod" "target/horizon-mod/ruby-$VERSION.hmod"
-          gh release create "v$VERSION" "target/horizon-mod/ruby-$VERSION.hmod" \
-            --repo "$GITHUB_REPOSITORY" \
-            --title "Ruby $VERSION" \
-            --notes "Example Horizon Android content mod. SHA-256 and package metadata are indexed automatically."
+          if gh release view "v$VERSION" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "v$VERSION" "target/horizon-mod/ruby-$VERSION.hmod" --repo "$GITHUB_REPOSITORY" --clobber
+          else
+            gh release create "v$VERSION" "target/horizon-mod/ruby-$VERSION.hmod" \
+              --repo "$GITHUB_REPOSITORY" \
+              --title "Ruby $VERSION" \
+              --notes "Example Horizon Android content mod. SHA-256 and package metadata are indexed automatically."
+          fi
+      - name: Generate catalogue from the published asset
+        env:
+          GITHUB_REF_NAME: v${{ env.VERSION }}
+          RELEASE_BODY: "Ruby example mod release."
+          RELEASE_ASSETS: target/horizon-mod
+        run: |
+          python scripts/publish_release.py
+          python -m json.tool catalog/mods.json > /dev/null
+      - name: Commit catalogue
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add catalog/mods.json
+          git diff --cached --quiet || git commit -m "chore(catalog): publish ruby v${{ env.VERSION }}"
+          git push
