@@ -21,4 +21,4 @@ Maximum package size: 64 MiB. Downloads are restricted to GitHub Release assets 
 
 ## Publish the included example
 
-After merging this repository's changes, open **Actions → Build example Ruby mod → Run workflow**. Enter a version (the first release should be `0.1.0`). The workflow builds and validates the `.hmod`, creates the GitHub Release, and the catalogue workflow automatically indexes the release asset.
+Merging the example's `horizon-mod.toml` into `main` automatically builds and validates the `.hmod`, creates the matching GitHub Release, and triggers the catalogue workflow. For later versions, increase `version` in the manifest before merging.

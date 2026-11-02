@@ -1,12 +1,10 @@
-name: Build example Ruby mod
+name: Build and publish example Ruby mod
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: "Version to publish (must match horizon-mod.toml)"
-        required: true
-        default: "0.1.0"
+  push:
+    branches: [main]
+    paths:
+      - "examples/ruby-content/horizon-mod.toml"
 
 permissions:
   contents: write
@@ -19,24 +17,20 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - name: Install Horizon mod tool
         run: cargo install --git https://github.com/Geko7490/Minecraft --branch android cargo-horizon-mod
-      - name: Build example
+      - name: Build and validate example
         working-directory: examples/ruby-content
-        run: cargo horizon-mod build
-      - name: Validate package
-        working-directory: examples/ruby-content
-        run: cargo horizon-mod check target/horizon-mod/ruby.hmod
-      - name: Prepare release asset
-        working-directory: examples/ruby-content
-        env:
-          VERSION: ${{ inputs.version }}
-        run: cp target/horizon-mod/ruby.hmod target/horizon-mod/ruby-${VERSION}.hmod
-      - name: Publish GitHub Release
+        run: |
+          cargo horizon-mod build
+          cargo horizon-mod check target/horizon-mod/ruby.hmod
+      - name: Publish release asset
         working-directory: examples/ruby-content
         env:
           GH_TOKEN: ${{ github.token }}
-          VERSION: ${{ inputs.version }}
         run: |
-          gh release create "v${VERSION}" "target/horizon-mod/ruby-${VERSION}.hmod" \
+          VERSION="$(sed -n 's/^version = "\(.*\)"/\1/p' horizon-mod.toml)"
+          test -n "$VERSION"
+          cp "target/horizon-mod/ruby.hmod" "target/horizon-mod/ruby-$VERSION.hmod"
+          gh release create "v$VERSION" "target/horizon-mod/ruby-$VERSION.hmod" \
             --repo "$GITHUB_REPOSITORY" \
-            --title "Ruby ${VERSION}" \
+            --title "Ruby $VERSION" \
             --notes "Example Horizon Android content mod. SHA-256 and package metadata are indexed automatically."
