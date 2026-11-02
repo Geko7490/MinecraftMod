@@ -3,6 +3,7 @@
 from __future__ import annotations
 import argparse
 import json
+import math
 import re
 import tomllib
 from pathlib import Path
@@ -52,6 +53,42 @@ def build(source: Path, output: Path) -> Path:
                 files.append(path)
     if len(files) < 2:
         raise SystemExit("A content mod needs assets/ or data/ files")
+
+    # Validate the currently supported data-driven EntityType API as well as
+    # JSON syntax: each snowball-based projectile must own a registered item.
+    data_root = source / "data" / mod_id / "horizon"
+    registered_items: set[str] = set()
+    item_root = data_root / "item"
+    if item_root.is_dir():
+        for path in item_root.glob("*.json"):
+            registered_items.add(f"{mod_id}:{path.stem}")
+    block_root = data_root / "block"
+    if block_root.is_dir():
+        for path in block_root.glob("*.json"):
+            declaration = json.loads(path.read_text(encoding="utf-8"))
+            if declaration.get("item", True):
+                registered_items.add(f"{mod_id}:{path.stem}")
+
+    entity_root = data_root / "entity_type"
+    used_items: set[str] = set()
+    if entity_root.is_dir():
+        for path in sorted(entity_root.glob("*.json")):
+            declaration = json.loads(path.read_text(encoding="utf-8"))
+            allowed = {"template", "item", "damage"}
+            unknown = set(declaration) - allowed
+            if unknown:
+                raise SystemExit(f"{path}: unknown EntityType fields: {sorted(unknown)}")
+            if declaration.get("template") != "minecraft:snowball":
+                raise SystemExit(f"{path}: only minecraft:snowball is currently supported")
+            item = declaration.get("item")
+            if not isinstance(item, str) or item not in registered_items:
+                raise SystemExit(f"{path}: item must reference an item registered by this mod")
+            if item in used_items:
+                raise SystemExit(f"{path}: item {item} is already bound to another entity type")
+            used_items.add(item)
+            damage = declaration.get("damage", 0)
+            if isinstance(damage, bool) or not isinstance(damage, (int, float)) or not math.isfinite(damage) or damage < 0:
+                raise SystemExit(f"{path}: damage must be a finite number greater than or equal to zero")
     output.parent.mkdir(parents=True, exist_ok=True)
     with ZipFile(output, "w", compression=ZIP_DEFLATED, compresslevel=9) as archive:
         for path in files:
