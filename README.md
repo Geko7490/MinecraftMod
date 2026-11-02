@@ -34,6 +34,18 @@ The living API does **not** yet allow custom AI goals, target selectors, pathfin
 
 Maximum package size: 64 MiB. Downloads are restricted to GitHub Release assets in this repository and pinned by SHA-256 and exact byte size.
 
+## Validate the examples
+
+From the repository root:
+
+~~~bash
+python scripts/build_hmod.py --source examples/vex-spark --output target/horizon-mod/vex_spark.hmod
+python scripts/build_hmod.py --source examples/vex-sentinel --output target/horizon-mod/vex_sentinel.hmod
+python scripts/validate_catalog.py
+~~~
+
+The builder checks the EntityType kind, supported template, projectile item ownership and uniqueness, living attribute allowlist and numeric values, ZIP integrity, and package size. The game runtime still needs in-game testing for actual spawning and behaviour.
+
 ## Catalogue compatibility
 
 The catalogue remains at schema version 1. New discovery fields (category, featured, tags, and screenshots) are optional so existing clients that ignore unknown JSON fields can continue to read the catalogue. Required package identity, compatibility, size and hash fields remain unchanged.
