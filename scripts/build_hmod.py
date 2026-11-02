@@ -54,8 +54,7 @@ def build(source: Path, output: Path) -> Path:
     if len(files) < 2:
         raise SystemExit("A content mod needs assets/ or data/ files")
 
-    # Validate the currently supported data-driven EntityType API as well as
-    # JSON syntax: each snowball-based projectile must own a registered item.
+    # Validate data-driven projectile and living EntityType declarations.
     data_root = source / "data" / mod_id / "horizon"
     registered_items: set[str] = set()
     item_root = data_root / "item"
@@ -69,26 +68,63 @@ def build(source: Path, output: Path) -> Path:
             if declaration.get("item", True):
                 registered_items.add(f"{mod_id}:{path.stem}")
 
+    living_templates = {
+        "minecraft:zombie", "minecraft:skeleton", "minecraft:cow",
+        "minecraft:pig", "minecraft:sheep", "minecraft:chicken",
+        "minecraft:spider", "minecraft:creeper", "minecraft:wolf",
+        "minecraft:iron_golem",
+    }
+    living_attributes = {
+        "minecraft:max_health", "minecraft:movement_speed",
+        "minecraft:attack_damage", "minecraft:armor",
+        "minecraft:armor_toughness", "minecraft:knockback_resistance",
+        "minecraft:follow_range", "minecraft:jump_strength",
+        "minecraft:flying_speed",
+    }
     entity_root = data_root / "entity_type"
     used_items: set[str] = set()
     if entity_root.is_dir():
         for path in sorted(entity_root.glob("*.json")):
             declaration = json.loads(path.read_text(encoding="utf-8"))
-            allowed = {"template", "item", "damage"}
+            allowed = {"kind", "template", "item", "damage", "attributes"}
             unknown = set(declaration) - allowed
             if unknown:
                 raise SystemExit(f"{path}: unknown EntityType fields: {sorted(unknown)}")
-            if declaration.get("template") != "minecraft:snowball":
-                raise SystemExit(f"{path}: only minecraft:snowball is currently supported")
-            item = declaration.get("item")
-            if not isinstance(item, str) or item not in registered_items:
-                raise SystemExit(f"{path}: item must reference an item registered by this mod")
-            if item in used_items:
-                raise SystemExit(f"{path}: item {item} is already bound to another entity type")
-            used_items.add(item)
-            damage = declaration.get("damage", 0)
-            if isinstance(damage, bool) or not isinstance(damage, (int, float)) or not math.isfinite(damage) or damage < 0:
-                raise SystemExit(f"{path}: damage must be a finite number greater than or equal to zero")
+            kind = declaration.get("kind", "projectile")
+            template = declaration.get("template")
+            if kind == "projectile":
+                if template != "minecraft:snowball":
+                    raise SystemExit(f"{path}: only minecraft:snowball projectile templates are supported")
+                item = declaration.get("item")
+                if not isinstance(item, str) or item not in registered_items:
+                    raise SystemExit(f"{path}: projectile item must be registered by this mod")
+                if item in used_items:
+                    raise SystemExit(f"{path}: item {item} is already bound to another entity type")
+                used_items.add(item)
+                if declaration.get("attributes"):
+                    raise SystemExit(f"{path}: projectile entities cannot set living attributes")
+                damage = declaration.get("damage", 0)
+                if isinstance(damage, bool) or not isinstance(damage, (int, float)) or not math.isfinite(damage) or damage < 0:
+                    raise SystemExit(f"{path}: damage must be a finite number greater than or equal to zero")
+            elif kind == "living":
+                if template not in living_templates:
+                    raise SystemExit(f"{path}: unsupported living entity template: {template}")
+                if "item" in declaration:
+                    raise SystemExit(f"{path}: living entities are summoned by id and do not take an item")
+                if declaration.get("damage", 0) != 0:
+                    raise SystemExit(f"{path}: living entity damage is inherited; use attributes.minecraft:attack_damage")
+                attributes = declaration.get("attributes", {})
+                if not isinstance(attributes, dict):
+                    raise SystemExit(f"{path}: attributes must be an object")
+                for attribute, value in attributes.items():
+                    if attribute not in living_attributes:
+                        raise SystemExit(f"{path}: unsupported living attribute: {attribute}")
+                    if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or value < 0:
+                        raise SystemExit(f"{path}: {attribute} must be a finite non-negative number")
+                    if attribute == "minecraft:max_health" and value == 0:
+                        raise SystemExit(f"{path}: max_health must be greater than zero")
+            else:
+                raise SystemExit(f"{path}: kind must be projectile or living")
     output.parent.mkdir(parents=True, exist_ok=True)
     with ZipFile(output, "w", compression=ZIP_DEFLATED, compresslevel=9) as archive:
         for path in files:
