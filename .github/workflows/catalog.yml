@@ -48,7 +48,9 @@ jobs:
           for path in pathlib.Path("mods").glob("*/mod.json"):
               meta=json.loads(path.read_text())
               assert meta["id"] == path.parent.name
-              assert meta["type"] == "hmod"
+              assert meta["type"] == "hmod" and meta["license"]
+              assert meta["source"].startswith("https://")
+              assert isinstance(meta["game_versions"], list) and meta["game_versions"]
           PY
   release:
     if: github.event_name == 'release'

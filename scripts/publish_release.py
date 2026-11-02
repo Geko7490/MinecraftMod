@@ -56,7 +56,7 @@ def main():
             "developer": metadata["developer"], "type": "hmod", "icon": metadata.get("icon"),
             "source": metadata["source"], "versions": [], "license": metadata["license"],
         })
-        for key in ("name", "description", "developer", "type", "icon", "source"):
+        for key in ("name", "description", "developer", "type", "icon", "source", "license"):
             if key in metadata:
                 entry[key] = metadata[key]
         release = {
