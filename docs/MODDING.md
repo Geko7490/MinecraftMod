@@ -2,7 +2,7 @@
 
 Bu rehber, Android sürümünde çalışan Horizon content modlarının hazırlanmasını ve MinecraftMod kataloğunda yayınlanmasını anlatır.
 
-> Android istemcisi Fabric/Forge/NeoForge Java modlarını (`.jar`) çalıştırmaz. Katalog yalnızca Horizon'ın desteklediği `.hmod` paketlerini kabul eder. `.hnmod` native Rust paketleri Android'e yüklenemez.
+> Android istemcisi Fabric/Forge/NeoForge Java modlarını (.jar) çalıştırmaz. Katalog yalnızca Horizon'ın desteklediği .hmod paketlerini kabul eder. Native .hnmod paketleri bu mağazanın kapsamı dışındadır.
 
 ## 1. Araçlar
 
@@ -12,95 +12,87 @@ Python 3.11+ ve Git yeterlidir. Content modları için Rust derleyicisi veya öz
 
 Örnek projeyi kopyala ve mod kimliğini kendi moduna göre değiştir:
 
-```bash
-cp -R examples/ruby-content my-ruby
-```
+~~~bash
+cp -R examples/ruby-content my-mod
+~~~
 
 Content modları Rust kodu çalıştırmaz; desteklenen blok, eşya, tarif, loot table, model, texture ve dil verilerini paketler. Tam örnek: [examples/ruby-content](../examples/ruby-content/).
 
-## 3. Yapı
+## 3. Paket yapısı
 
-```
-ruby/
+~~~text
+my-mod/
 ├── horizon-mod.toml
-├── assets/ruby/{blockstates,items,models,textures,lang}/
-└── data/ruby/{horizon/block,horizon/item,loot_table,recipe}/
-```
+├── assets/<namespace>/{blockstates,items,models,textures,lang}/
+└── data/<namespace>/{horizon/block,horizon/item,loot_table,recipe}/
+~~~
 
-## 4. Manifest
+## 4. Paket manifesti
 
-```toml
-id = "ruby"
-name = "Ruby"
-version = "0.1.0"
-description = "Adds a ruby gem and a ruby block"
+~~~toml
+id = "my_mod"
+name = "My Mod"
+version = "1.0.0"
+description = "A short description"
 authors = ["YourName"]
 api = "0.2"
 side = "both"
 capabilities = ["registries"]
-```
+~~~
 
-`id` küçük harf/rakam/alt çizgi, 1–64 karakter olmalı. `api = "0.2"` content API'sidir. `registries` blok/eşya kayıtlarını açar. Manifestte desteklenmeyen alanlar reddedilir.
+ID küçük harf/rakam/alt çizgi, 1–64 karakter olmalı. api = "0.2" content API'sidir. registries blok/eşya kayıtlarını açar.
 
-## 5. Ruby içerik örneği
+## 5. Katalog metadata
 
-`data/ruby/horizon/block/ruby_block.json`:
+Katalog deposunda **mods/<id>/mod.json** oluştur:
 
-```json
-{"template":"minecraft:iron_block","properties":{"hardness":4.0,"light":3,"sounds":"minecraft:amethyst_block","map_color":28}}
-```
+~~~json
+{
+  "id": "my_mod",
+  "name": "My Mod",
+  "description": "A short description.",
+  "developer": "YourName",
+  "type": "hmod",
+  "category": "items",
+  "featured": false,
+  "tags": ["items", "utility"],
+  "icon": "https://raw.githubusercontent.com/Geko7490/MinecraftMod/main/assets/mods/my_mod/icon.png",
+  "screenshots": [],
+  "license": "MIT",
+  "source": "https://github.com/YourName/my-mod",
+  "game_versions": ["26.3"]
+}
+~~~
 
-`data/ruby/horizon/item/ruby.json`:
-
-```json
-{"template":"minecraft:diamond","rarity":"uncommon"}
-```
-
-İsimler `assets/ruby/lang/en_us.json` içinde:
-
-```json
-{"block.ruby.ruby_block":"Block of Ruby","item.ruby.ruby":"Ruby"}
-```
-
-Model, blockstate, texture, loot ve tarif dosyaları örnek projede bulunur. Desteklenen alanlar ve sınırlamalar: [Horizon mod dokümantasyonu](https://github.com/Geko7490/Minecraft/blob/android/docs/mods.md).
+Zorunlu alanlar: id, name, description, developer, type, license, source, game_versions. category, featured, tags, icon ve screenshots isteğe bağlıdır. Kategori kimlikleri [catalog/categories.json](../catalog/categories.json) içinde tanımlanır. Görsel adresleri HTTPS olmalıdır. Yalnızca gerçekten test ettiğin oyun sürümlerini yaz.
 
 ## 6. Derle ve kontrol et
 
-```bash
-python scripts/build_hmod.py --source my-ruby --output target/horizon-mod/ruby.hmod
-```
+~~~bash
+python scripts/build_hmod.py --source my-mod --output target/horizon-mod/my_mod.hmod
+python scripts/validate_catalog.py
+~~~
 
-Bu betik manifesti, capability değerlerini, dosya yollarını, JSON dosyalarını, PNG başlıklarını ve ZIP bütünlüğünü kontrol eder. Çıktı: `target/horizon-mod/ruby.hmod`. Oyun, kurulum sırasında manifesti, dosya boyutunu ve SHA-256 değerini yeniden doğrular. Android cihaz testi ayrıca gereklidir.
+Derleyici manifesti, capability değerlerini, dosya yollarını, JSON dosyalarını, PNG başlıklarını, ZIP bütünlüğünü ve 64 MiB sınırını kontrol eder.
 
-## 7. Katalog metadata
+## 7. Yayınla
 
-Katalog deposunda `mods/ruby/mod.json` oluştur:
+Dosya adı **<id>-<version>.hmod** olmalı:
 
-```json
-{
-  "id": "ruby",
-  "name": "Ruby",
-  "description": "Adds a ruby gem and a ruby block.",
-  "developer": "YourName",
-  "type": "hmod",
-  "license": "MIT",
-  "source": "https://github.com/YourName/ruby-mod",
-  "game_versions": ["26.3"]
-}
-```
+~~~bash
+cp target/horizon-mod/my_mod.hmod target/horizon-mod/my_mod-1.0.0.hmod
+gh release create v1.0.0 target/horizon-mod/my_mod-1.0.0.hmod \
+  --repo Geko7490/MinecraftMod --title "My Mod 1.0.0" --notes "Initial release."
+~~~
 
-`id` manifest ile aynı olmalı. `license` SPDX kimliğidir. `source` HTTPS kaynak kodu adresidir. Yalnızca test ettiğin oyun sürümlerini yaz.
+Release yayımlandığında GitHub Actions:
+1. Release içindeki HMOD paketlerini indirir.
+2. ZIP içeriğini ve kök manifestini doğrular.
+3. Mod ID, sürüm, API ve metadata eşleşmesini kontrol eder.
+4. SHA-256 ve tam dosya boyutunu hesaplar.
+5. Yeni sürümü kataloğa ekler; eski sürümleri korur.
+6. Kataloğu doğrular ve catalog/mods.json dosyasını günceller.
 
-## 8. Yayınla
+Yayımlanmış bir mod sürümünün paket baytları değiştirilemez. Aynı sürüm farklı SHA-256 ile yeniden yayımlanmaya çalışılırsa yayın doğrulaması başarısız olur. Yeni paket için sürüm numarasını artır.
 
-Dosya adı `<id>-<version>.hmod` olmalı:
-
-```bash
-cp target/horizon-mod/ruby.hmod target/horizon-mod/ruby-0.1.0.hmod
-gh release create v0.1.0 target/horizon-mod/ruby-0.1.0.hmod \
-  --repo Geko7490/MinecraftMod --title "Ruby 0.1.0" --notes "Initial release."
-```
-
-Release **published** olunca Actions manifesti doğrular, API/side/capabilities bilgisini alır, dosya boyutu ve SHA-256 hesaplar ve `catalog/mods.json` dosyasını günceller. Başarısız doğrulama yayınlanmaz.
-
-Yeni sürümde manifestteki `version` değerini artır, yeniden derle ve yeni GitHub Release yayımla. İlk örnek sürümünün manifesti `main` dalına alındığında GitHub Actions otomatik olarak paketi derler, Release oluşturur ve kataloğa ekler. Sonraki sürümlerde manifestteki sürüm numarasını artır.
+Ayrıntılar: [Publishing guide](PUBLISHING.md).
