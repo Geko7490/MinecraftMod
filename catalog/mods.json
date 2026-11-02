@@ -1,5 +1,35 @@
 {
   "schema": 1,
-  "generated": "2026-11-02T00:00:00Z",
-  "mods": []
+  "generated": "2026-11-02T18:26:33.604117Z",
+  "mods": [
+    {
+      "id": "ruby",
+      "name": "Ruby",
+      "description": "Adds a ruby gem and a ruby block with crafting recipes.",
+      "developer": "Geko7490",
+      "type": "hmod",
+      "icon": null,
+      "source": "https://github.com/Geko7490/MinecraftMod",
+      "versions": [
+        {
+          "version": "0.1.0",
+          "game_versions": [
+            "26.3"
+          ],
+          "api": "0.2",
+          "side": "both",
+          "capabilities": [
+            "registries"
+          ],
+          "download_url": "https://github.com/Geko7490/MinecraftMod/releases/download/main/ruby-0.1.0.hmod",
+          "file_name": "ruby-0.1.0.hmod",
+          "size": 3688,
+          "sha256": "1740faca8cea3d6d8287b5cb311f7fc91121ae32c627fb584a6bb64fd0d3eb91",
+          "published": "2026-11-02T18:26:33.604101Z",
+          "changelog": "Ruby example mod release."
+        }
+      ],
+      "license": "MIT"
+    }
+  ]
 }
