@@ -47,7 +47,7 @@ def build(source: Path, output: Path) -> Path:
                         json.loads(raw)
                     except Exception as exc:
                         raise SystemExit(f"Invalid JSON {rel}: {exc}") from exc
-                if path.suffix == ".png" and not raw.startswith(b"\\x89PNG\\r\\n\\x1a\\n"):
+                if path.suffix == ".png" and not raw.startswith(b"\x89PNG\r\n\x1a\n"):
                     raise SystemExit(f"Invalid PNG texture: {rel}")
                 files.append(path)
     if len(files) < 2:
