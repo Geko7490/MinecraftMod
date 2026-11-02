@@ -18,7 +18,6 @@ See [docs/MODDING.md](docs/MODDING.md) and [examples/ruby-content](examples/ruby
 
 Maximum package size: 64 MiB. Downloads are restricted to GitHub Release assets in this repository and pinned by SHA-256 and exact byte size.
 
-
 ## Publish the included example
 
 Merging the example's `horizon-mod.toml` into `main` automatically builds and validates the `.hmod`, creates the matching GitHub Release, and triggers the catalogue workflow. For later versions, increase `version` in the manifest before merging.

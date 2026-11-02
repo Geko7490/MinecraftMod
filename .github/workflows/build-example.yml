@@ -1,33 +1,26 @@
 name: Build and publish example Ruby mod
-
 on:
   push:
     branches: [main]
     paths:
       - "examples/ruby-content/horizon-mod.toml"
-
 permissions:
   contents: write
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-      - name: Install Horizon mod tool
-        run: cargo install --git https://github.com/Geko7490/Minecraft --branch android cargo-horizon-mod
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
       - name: Build and validate example
-        working-directory: examples/ruby-content
-        run: |
-          cargo horizon-mod build
-          cargo horizon-mod check target/horizon-mod/ruby.hmod
+        run: python scripts/build_hmod.py
       - name: Publish release asset
-        working-directory: examples/ruby-content
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          VERSION="$(sed -n 's/^version = "\(.*\)"/\1/p' horizon-mod.toml)"
+          VERSION="$(python -c 'import tomllib; print(tomllib.load(open("examples/ruby-content/horizon-mod.toml", "rb"))["version"])')"
           test -n "$VERSION"
           cp "target/horizon-mod/ruby.hmod" "target/horizon-mod/ruby-$VERSION.hmod"
           gh release create "v$VERSION" "target/horizon-mod/ruby-$VERSION.hmod" \

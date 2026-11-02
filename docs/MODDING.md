@@ -6,18 +6,14 @@ Bu rehber, Android sürümünde çalışan Horizon content modlarının hazırla
 
 ## 1. Araçlar
 
-```bash
-rustup target add wasm32-unknown-unknown
-cargo install --git https://github.com/Geko7490/Minecraft --branch android cargo-horizon-mod
-```
-
-Rust, Cargo, Git ve Horizon mod aracı gerekir.
+Python 3.11+ ve Git yeterlidir. Content modları için Rust derleyicisi veya özel SDK kurulumu gerekmez.
 
 ## 2. Mod oluştur
 
+Örnek projeyi kopyala ve mod kimliğini kendi moduna göre değiştir:
+
 ```bash
-cargo horizon-mod new ruby --template content --name "Ruby"
-cd ruby
+cp -R examples/ruby-content my-ruby
 ```
 
 Content modları Rust kodu çalıştırmaz; desteklenen blok, eşya, tarif, loot table, model, texture ve dil verilerini paketler. Tam örnek: [examples/ruby-content](../examples/ruby-content/).
@@ -71,11 +67,10 @@ Model, blockstate, texture, loot ve tarif dosyaları örnek projede bulunur. Des
 ## 6. Derle ve kontrol et
 
 ```bash
-cargo horizon-mod build
-cargo horizon-mod check target/horizon-mod/ruby.hmod
+python scripts/build_hmod.py --source my-ruby --output target/horizon-mod/ruby.hmod
 ```
 
-Çıktı: `target/horizon-mod/ruby.hmod`. Başarısız doğrulamayı yayınlama. Oyunda test et; Android cihaz testi ayrıca gereklidir.
+Bu betik manifesti, capability değerlerini, dosya yollarını, JSON dosyalarını, PNG başlıklarını ve ZIP bütünlüğünü kontrol eder. Çıktı: `target/horizon-mod/ruby.hmod`. Oyun, kurulum sırasında manifesti, dosya boyutunu ve SHA-256 değerini yeniden doğrular. Android cihaz testi ayrıca gereklidir.
 
 ## 7. Katalog metadata
 

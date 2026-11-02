@@ -23,7 +23,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m json.tool catalog/mods.json > /dev/null
-      - run: python -m py_compile scripts/publish_release.py
+      - run: python -m py_compile scripts/publish_release.py scripts/build_hmod.py
       - name: Validate metadata and catalog contracts
         run: |
           python - <<'PY'
@@ -81,7 +81,6 @@ jobs:
           git add catalog/mods.json
           git diff --cached --quiet || git commit -m "chore(catalog): publish ${{ github.event.release.tag_name }}"
           git push
-
   example-mod:
     if: github.event_name != 'release'
     runs-on: ubuntu-latest
@@ -89,11 +88,8 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-      - name: Install Horizon mod tool
-        run: cargo install --git https://github.com/Geko7490/Minecraft --branch android cargo-horizon-mod
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
       - name: Build and validate Ruby example
-        working-directory: examples/ruby-content
-        run: |
-          cargo horizon-mod build
-          cargo horizon-mod check target/horizon-mod/ruby.hmod
+        run: python scripts/build_hmod.py
