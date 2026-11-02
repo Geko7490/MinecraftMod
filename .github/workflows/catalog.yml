@@ -23,7 +23,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m json.tool catalog/mods.json > /dev/null
-      - run: python -m py_compile scripts/publish_release.py
+      - run: python -m py_compile scripts/publish_release.py scripts/build_hmod.py
       - name: Validate metadata and catalog contracts
         run: |
           python - <<'PY'
@@ -36,7 +36,11 @@ jobs:
               assert re.fullmatch(r"[a-z0-9_]{1,64}", mod["id"])
               assert mod["id"] not in ids
               ids.add(mod["id"])
-              assert mod["type"] == "hmod"
+              assert mod["type"] == "hmod" and mod["license"]
+              for version in mod["versions"]:
+                  assert version["api"] in {"0.1", "0.2", "0.3"}
+                  assert version["side"] in {"client", "server", "both"}
+                  assert isinstance(version["capabilities"], list)
               for version in mod["versions"]:
                   assert re.fullmatch(r"[a-f0-9]{64}", version["sha256"])
                   assert version["size"] > 0
@@ -44,7 +48,9 @@ jobs:
           for path in pathlib.Path("mods").glob("*/mod.json"):
               meta=json.loads(path.read_text())
               assert meta["id"] == path.parent.name
-              assert meta["type"] == "hmod"
+              assert meta["type"] == "hmod" and meta["license"]
+              assert meta["source"].startswith("https://")
+              assert isinstance(meta["game_versions"], list) and meta["game_versions"]
           PY
   release:
     if: github.event_name == 'release'
@@ -75,3 +81,15 @@ jobs:
           git add catalog/mods.json
           git diff --cached --quiet || git commit -m "chore(catalog): publish ${{ github.event.release.tag_name }}"
           git push
+  example-mod:
+    if: github.event_name != 'release'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build and validate Ruby example
+        run: python scripts/build_hmod.py

@@ -43,7 +43,7 @@ def main():
         if not metadata_path.is_file():
             fail(f"Missing metadata: mods/{mod_id}/mod.json")
         metadata = load_json(metadata_path)
-        if metadata.get("id") != mod_id or metadata.get("type") != "hmod":
+        if metadata.get("id") != mod_id or metadata.get("type") != "hmod" or not metadata.get("license"):
             fail(f"{metadata_path}: id/type does not match package")
         expected_name = f"{mod_id}-{version}.hmod"
         if package.name != expected_name:
@@ -54,14 +54,16 @@ def main():
         entry = known.setdefault(mod_id, {
             "id": mod_id, "name": metadata["name"], "description": metadata["description"],
             "developer": metadata["developer"], "type": "hmod", "icon": metadata.get("icon"),
-            "source": metadata["source"], "versions": [],
+            "source": metadata["source"], "versions": [], "license": metadata["license"],
         })
-        for key in ("name", "description", "developer", "type", "icon", "source"):
+        for key in ("name", "description", "developer", "type", "icon", "source", "license"):
             if key in metadata:
                 entry[key] = metadata[key]
         release = {
             "version": version,
             "game_versions": metadata.get("game_versions", ["26.3"]),
+            "api": manifest["api"], "side": manifest.get("side", "client"),
+            "capabilities": manifest.get("capabilities", []),
             "download_url": f"https://github.com/Geko7490/MinecraftMod/releases/download/{TAG}/{package.name}",
             "file_name": package.name, "size": len(data),
             "sha256": hashlib.sha256(data).hexdigest(),

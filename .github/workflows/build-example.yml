@@ -1,0 +1,29 @@
+name: Build and publish example Ruby mod
+on:
+  push:
+    branches: [main]
+    paths:
+      - "examples/ruby-content/horizon-mod.toml"
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build and validate example
+        run: python scripts/build_hmod.py
+      - name: Publish release asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="$(python -c 'import tomllib; print(tomllib.load(open("examples/ruby-content/horizon-mod.toml", "rb"))["version"])')"
+          test -n "$VERSION"
+          cp "target/horizon-mod/ruby.hmod" "target/horizon-mod/ruby-$VERSION.hmod"
+          gh release create "v$VERSION" "target/horizon-mod/ruby-$VERSION.hmod" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "Ruby $VERSION" \
+            --notes "Example Horizon Android content mod. SHA-256 and package metadata are indexed automatically."

@@ -1,0 +1,12 @@
+{
+  "id": "ruby",
+  "name": "Ruby",
+  "description": "Adds a ruby gem and a ruby block with crafting recipes.",
+  "developer": "Geko7490",
+  "type": "hmod",
+  "license": "MIT",
+  "source": "https://github.com/Geko7490/MinecraftMod",
+  "game_versions": [
+    "26.3"
+  ]
+}

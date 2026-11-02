@@ -1,0 +1,8 @@
+id = "ruby"
+name = "Ruby"
+version = "0.1.0"
+description = "A ruby gem and a block of ruby"
+authors = ["Geko7490"]
+api = "0.2"
+side = "both"
+capabilities = ["registries"]
