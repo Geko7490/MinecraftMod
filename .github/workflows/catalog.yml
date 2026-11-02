@@ -31,7 +31,9 @@ jobs:
       - name: Validate official catalogue and metadata
         run: python scripts/validate_catalog.py
       - name: Build and validate Ruby example
-        run: python scripts/build_hmod.py
+        run: python scripts/build_hmod.py --source examples/ruby-content --output target/horizon-mod/ruby.hmod
+      - name: Build and validate Vex Spark entity example
+        run: python scripts/build_hmod.py --source examples/vex-spark --output target/horizon-mod/vex_spark.hmod
 
   publish:
     if: github.event_name == 'release'
