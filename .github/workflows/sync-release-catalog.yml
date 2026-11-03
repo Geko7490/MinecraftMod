@@ -1,0 +1,49 @@
+name: Sync published HMOD releases into catalogue
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/sync-release-catalog.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-published-hmod-catalog
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Download immutable release assets and index verified metadata
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          for TAG in vex-spark-0.1.0 vex-sentinel-0.1.0 vex-wisp-0.1.0; do
+            DIR=".release-assets/$TAG"
+            mkdir -p "$DIR"
+            gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --dir "$DIR" --pattern '*.hmod'
+            export GITHUB_REF_NAME="$TAG"
+            export RELEASE_ASSETS="$DIR"
+            export RELEASE_BODY="Experimental HMOD release. Runtime behavior still requires in-game verification."
+            python scripts/publish_release.py
+          done
+      - name: Validate the complete official catalogue
+        run: python scripts/validate_catalog.py
+      - name: Commit catalogue
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add catalog/mods.json
+          git diff --cached --quiet || git commit -m "chore(catalog): index experimental Vex releases"
+          git push origin HEAD:main
