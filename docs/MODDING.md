@@ -76,7 +76,7 @@ Modun kendi item'ı projectile'ı fırlatır; bir item yalnızca tek entity tür
 - `minecraft:iron_golem`
 - `minecraft:vex` — reuses Horizon's flying movement, charge/melee attack, owner/nearest-player targeting, Vex model, animation and sounds.
 
-Örnek:
+Örnek (Vex Sentinel kendi goal ve hedef listesini tanımlar):
 
 ~~~json
 {
@@ -88,15 +88,46 @@ Modun kendi item'ı projectile'ı fırlatır; bir item yalnızca tek entity tür
     "minecraft:attack_damage": 7.0,
     "minecraft:follow_range": 32.0,
     "minecraft:armor": 4.0
+  },
+  "ai": {
+    "mode": "replace",
+    "goals": [
+      {"type": "float", "priority": 0},
+      {"type": "melee_attack", "priority": 2, "speed": 1.1, "follow_unseen": true, "interval": 16},
+      {"type": "stroll", "priority": 5, "speed": 0.85, "avoid_water": true},
+      {"type": "look_at_player", "priority": 6, "range": 12.0, "probability": 0.05},
+      {"type": "random_look_around", "priority": 7}
+    ],
+    "targets": [
+      {"type": "hurt_by", "priority": 1, "alert": true},
+      {"type": "nearest_player", "priority": 2, "must_see": false, "interval": 8}
+    ]
   }
 }
 ~~~
 
 Desteklenen attribute alanları: `minecraft:max_health`, `minecraft:movement_speed`, `minecraft:attack_damage`, `minecraft:armor`, `minecraft:armor_toughness`, `minecraft:knockback_resistance`, `minecraft:follow_range`, `minecraft:jump_strength`, `minecraft:flying_speed`.
 
+#### Declarative AI
+
+AI tanımı isteğe bağlıdır ve yalnızca living entity türlerinde kullanılabilir. `mode` değeri `extend` (varsayılan) ise vanilla şablonunun davranışlarına ekleme yapar; `replace` ise vanilla goal ve target listelerini verilen listelerle değiştirir. Template'in hareket kontrolü, fizik ve özel tick davranışları korunur.
+
+Desteklenen goal türleri:
+- `float`
+- `melee_attack` — mevcut navigasyon/pathfinding altyapısını kullanır.
+- `stroll`
+- `look_at_player`
+- `random_look_around`
+
+Desteklenen target türleri:
+- `hurt_by` — saldırıya uğradığında saldırganı hedef alır; `alert: true` aynı türdeki yakın mobları da uyarır.
+- `nearest_player` — en yakın oyuncuyu hedef seçer.
+
+Öncelik 0–100, hız 0–8, bakış mesafesi 0–128, olasılık 0–1 ve zaman aralıkları 1–1200 sınırındadır. Goal/target tanımları yalnızca veri içerir; HMOD içinden script, Rust kodu veya keyfi callback çalıştırılmaz.
+
 Living entity'ler henüz spawn egg kullanmaz; `/summon <mod_id>:<name>` ile çağrılır. İsim `entity.<mod_id>.<name>` dil anahtarıyla çevrilir. Örnekler: [Vex Sentinel](../examples/vex-sentinel/) ve [Vex Wisp](../examples/vex-wisp/).
 
-**API sınırı:** Bu, vanilla archetype tabanlı yaşayan entity API'sidir; tamamen yeni AI API'si değildir. Modlar henüz kendi goal sınıflarını, hedef seçicilerini, pathfinding algoritmalarını, tick/event callback'lerini, model iskeletlerini veya animasyon controller'larını tanımlayamaz. Entity seçtiği vanilla template'in AI ve görsel davranışını kullanır.
+**API sınırı:** Özel goal ve target kombinasyonları desteklenir; özel pathfinding algoritmaları, keyfi tick/event callback'leri, tamamen mod tanımlı model iskeletleri ve animasyon controller'ları henüz desteklenmez. Model ve animasyonlar hâlâ vanilla template'ten gelir.
 
 ## 6. Katalog metadata
 
