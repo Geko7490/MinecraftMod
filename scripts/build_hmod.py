@@ -86,7 +86,7 @@ def build(source: Path, output: Path) -> Path:
     if entity_root.is_dir():
         for path in sorted(entity_root.glob("*.json")):
             declaration = json.loads(path.read_text(encoding="utf-8"))
-            allowed = {"kind", "template", "item", "damage", "attributes"}
+            allowed = {"kind", "template", "item", "damage", "attributes", "ai"}
             unknown = set(declaration) - allowed
             if unknown:
                 raise SystemExit(f"{path}: unknown EntityType fields: {sorted(unknown)}")
@@ -103,6 +103,8 @@ def build(source: Path, output: Path) -> Path:
                 used_items.add(item)
                 if declaration.get("attributes"):
                     raise SystemExit(f"{path}: projectile entities cannot set living attributes")
+                if "ai" in declaration:
+                    raise SystemExit(f"{path}: projectile entities cannot define living AI")
                 damage = declaration.get("damage", 0)
                 if isinstance(damage, bool) or not isinstance(damage, (int, float)) or not math.isfinite(damage) or damage < 0:
                     raise SystemExit(f"{path}: damage must be a finite number greater than or equal to zero")
@@ -123,6 +125,76 @@ def build(source: Path, output: Path) -> Path:
                         raise SystemExit(f"{path}: {attribute} must be a finite non-negative number")
                     if attribute == "minecraft:max_health" and value == 0:
                         raise SystemExit(f"{path}: max_health must be greater than zero")
+                ai = declaration.get("ai")
+                if ai is not None:
+                    if not isinstance(ai, dict):
+                        raise SystemExit(f"{path}: ai must be an object")
+                    if set(ai) - {"mode", "goals", "targets"}:
+                        raise SystemExit(f"{path}: unknown AI fields: {sorted(set(ai) - {'mode', 'goals', 'targets'})}")
+                    if ai.get("mode", "extend") not in {"extend", "replace"}:
+                        raise SystemExit(f"{path}: ai.mode must be extend or replace")
+                    goals = ai.get("goals", [])
+                    targets = ai.get("targets", [])
+                    if not isinstance(goals, list) or len(goals) > 24:
+                        raise SystemExit(f"{path}: ai.goals must be a list of at most 24 entries")
+                    if not isinstance(targets, list) or len(targets) > 16:
+                        raise SystemExit(f"{path}: ai.targets must be a list of at most 16 entries")
+                    goal_fields = {
+                        "float": {"priority"},
+                        "melee_attack": {"priority", "speed", "follow_unseen", "interval"},
+                        "stroll": {"priority", "speed", "avoid_water"},
+                        "look_at_player": {"priority", "range", "probability"},
+                        "random_look_around": {"priority"},
+                    }
+                    for goal in goals:
+                        if not isinstance(goal, dict) or goal.get("type") not in goal_fields:
+                            raise SystemExit(f"{path}: unsupported AI goal")
+                        kind_goal = goal["type"]
+                        if set(goal) - (goal_fields[kind_goal] | {"type"}):
+                            raise SystemExit(f"{path}: unknown fields in AI goal {kind_goal}")
+                        priority = goal.get("priority")
+                        if isinstance(priority, bool) or not isinstance(priority, int) or not 0 <= priority <= 100:
+                            raise SystemExit(f"{path}: AI goal priority must be 0..100")
+                        if kind_goal in {"melee_attack", "stroll"}:
+                            speed = goal.get("speed", 1.0)
+                            if isinstance(speed, bool) or not isinstance(speed, (int, float)) or not math.isfinite(speed) or not 0 < speed <= 8:
+                                raise SystemExit(f"{path}: AI goal speed must be greater than zero and at most 8")
+                        if kind_goal == "melee_attack":
+                            interval = goal.get("interval", 20)
+                            if isinstance(interval, bool) or not isinstance(interval, int) or not 1 <= interval <= 1200:
+                                raise SystemExit(f"{path}: melee_attack interval must be 1..1200")
+                            if "follow_unseen" in goal and not isinstance(goal["follow_unseen"], bool):
+                                raise SystemExit(f"{path}: follow_unseen must be boolean")
+                        if kind_goal == "stroll" and "avoid_water" in goal and not isinstance(goal["avoid_water"], bool):
+                            raise SystemExit(f"{path}: avoid_water must be boolean")
+                        if kind_goal == "look_at_player":
+                            distance = goal.get("range")
+                            probability = goal.get("probability", 0.02)
+                            if isinstance(distance, bool) or not isinstance(distance, (int, float)) or not math.isfinite(distance) or not 0 < distance <= 128:
+                                raise SystemExit(f"{path}: look_at_player range must be greater than zero and at most 128")
+                            if isinstance(probability, bool) or not isinstance(probability, (int, float)) or not math.isfinite(probability) or not 0 <= probability <= 1:
+                                raise SystemExit(f"{path}: look_at_player probability must be 0..1")
+                    target_fields = {
+                        "hurt_by": {"priority", "alert"},
+                        "nearest_player": {"priority", "must_see", "interval"},
+                    }
+                    for target in targets:
+                        if not isinstance(target, dict) or target.get("type") not in target_fields:
+                            raise SystemExit(f"{path}: unsupported AI target selector")
+                        kind_target = target["type"]
+                        if set(target) - (target_fields[kind_target] | {"type"}):
+                            raise SystemExit(f"{path}: unknown fields in AI target {kind_target}")
+                        priority = target.get("priority")
+                        if isinstance(priority, bool) or not isinstance(priority, int) or not 0 <= priority <= 100:
+                            raise SystemExit(f"{path}: AI target priority must be 0..100")
+                        if kind_target == "nearest_player":
+                            interval = target.get("interval", 10)
+                            if isinstance(interval, bool) or not isinstance(interval, int) or not 1 <= interval <= 1200:
+                                raise SystemExit(f"{path}: nearest_player interval must be 1..1200")
+                            if "must_see" in target and not isinstance(target["must_see"], bool):
+                                raise SystemExit(f"{path}: must_see must be boolean")
+                        if kind_target == "hurt_by" and "alert" in target and not isinstance(target["alert"], bool):
+                            raise SystemExit(f"{path}: alert must be boolean")
             else:
                 raise SystemExit(f"{path}: kind must be projectile or living")
     output.parent.mkdir(parents=True, exist_ok=True)
