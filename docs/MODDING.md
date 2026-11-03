@@ -110,7 +110,7 @@ Desteklenen attribute alanları: `minecraft:max_health`, `minecraft:movement_spe
 
 #### Declarative AI
 
-AI tanımı isteğe bağlıdır ve yalnızca living entity türlerinde kullanılabilir. `mode` değeri `extend` (varsayılan) ise vanilla şablonunun davranışlarına ekleme yapar; `replace` ise vanilla goal ve target listelerini verilen listelerle değiştirir. Template'in hareket kontrolü, fizik ve özel tick davranışları korunur.
+AI tanımı isteğe bağlıdır ve yalnızca living entity türlerinde kullanılabilir. Android istemcisinin `android` dalına AI ayrıştırıcısı ve çalışma zamanı desteği gelene kadar bu alanı kullanan modlar Mod Center kataloğunda sunulmamalıdır; `vex_sentinel` örneği `catalog_enabled: false` kullanır. `mode` değeri `extend` (varsayılan) ise vanilla şablonunun davranışlarına ekleme yapar; `replace` ise vanilla goal ve target listelerini verilen listelerle değiştirir. Template'in hareket kontrolü, fizik ve özel tick davranışları korunur.
 
 Desteklenen goal türleri:
 - `float`
@@ -150,7 +150,7 @@ Katalog deposunda **mods/<id>/mod.json** oluştur:
 }
 ~~~
 
-Zorunlu alanlar: id, name, description, developer, type, license, source. category, featured, tags, icon ve screenshots isteğe bağlıdır. Kategori kimlikleri [catalog/categories.json](../catalog/categories.json) içinde tanımlanır. Görsel adresleri HTTPS olmalıdır. Oyun sürümü ve API bilgisi yayınlanan HMOD manifestinden alınır; yalnızca gerçekten test ettiğin oyun sürümlerini yayın metadata'sında belirt.
+Zorunlu alanlar: id, name, description, developer, type, license, source. `category`, `featured`, `tags`, `icon`, `screenshots` ve `catalog_enabled` isteğe bağlıdır. `catalog_enabled` varsayılan olarak `true` değerindedir; mevcut Android istemcisiyle uyumlu olmayan modları yayımlarken `false` yapın. Bu modlar release doğrulamasından geçer ancak katalogda görünmez. Kategori kimlikleri [catalog/categories.json](../catalog/categories.json) içinde tanımlanır. Görsel adresleri HTTPS olmalıdır. Oyun sürümü ve API bilgisi yayınlanan HMOD manifestinden alınır; yalnızca gerçekten test ettiğin oyun sürümlerini yayın metadata'sında belirt.
 
 ## 7. Derle ve kontrol et
 
