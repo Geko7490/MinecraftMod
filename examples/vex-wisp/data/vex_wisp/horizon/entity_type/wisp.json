@@ -1,0 +1,10 @@
+{
+  "kind": "living",
+  "template": "minecraft:vex",
+  "attributes": {
+    "minecraft:max_health": 24.0,
+    "minecraft:attack_damage": 6.0,
+    "minecraft:follow_range": 28.0,
+    "minecraft:flying_speed": 0.6
+  }
+}
