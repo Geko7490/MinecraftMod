@@ -28,6 +28,8 @@ jobs:
           python-version: '3.12'
       - name: Check Python syntax
         run: python -m py_compile scripts/publish_release.py scripts/build_hmod.py scripts/validate_catalog.py
+      - name: Test catalogue publication gate
+        run: python -m unittest discover -s tests -p "test_*.py"
       - name: Validate official catalogue and metadata
         run: python scripts/validate_catalog.py
       - name: Build and validate Ruby example
