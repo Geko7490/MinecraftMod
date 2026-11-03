@@ -2,7 +2,7 @@
 
 ## Kaynak dosyalar
 
-- **mods/<id>/mod.json**: mağazada gösterilecek mod bilgileri.
+- **mods/<id>/mod.json**: mağazada gösterilecek mod bilgileri. `catalog_enabled: false`, Android istemcisi henüz uyumlu değilken paketin doğrulanmasına devam edip kataloğa eklenmesini önler; alan yoksa varsayılan `true` kabul edilir.
 - **catalog/categories.json**: mağaza kategori kimlikleri ve görünen adları.
 - **catalog/mods.json**: Actions tarafından üretilen istemci kataloğu.
 - **GitHub Release**: sürümlenmiş .hmod indirme varlıkları.
