@@ -13,6 +13,7 @@
     "type": { "const": "hmod" },
     "category": { "type": "string", "pattern": "^[a-z0-9_-]{1,48}$" },
     "featured": { "type": "boolean" },
+    "catalog_enabled": { "type": "boolean", "default": true },
     "tags": {
       "type": "array",
       "uniqueItems": true,
