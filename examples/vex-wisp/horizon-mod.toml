@@ -1,0 +1,8 @@
+id = "vex_wisp"
+name = "Vex Wisp"
+version = "0.1.0"
+description = "Adds a summonable flying Vex archetype with custom health, attack damage and flying speed."
+authors = ["Geko7490"]
+api = "0.2"
+side = "both"
+capabilities = ["registries"]
