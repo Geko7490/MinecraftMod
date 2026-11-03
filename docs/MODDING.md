@@ -74,6 +74,7 @@ Modun kendi item'ı projectile'ı fırlatır; bir item yalnızca tek entity tür
 - `minecraft:creeper`
 - `minecraft:wolf`
 - `minecraft:iron_golem`
+- `minecraft:vex` — reuses Horizon's flying movement, charge/melee attack, owner/nearest-player targeting, Vex model, animation and sounds.
 
 Örnek:
 
@@ -93,7 +94,7 @@ Modun kendi item'ı projectile'ı fırlatır; bir item yalnızca tek entity tür
 
 Desteklenen attribute alanları: `minecraft:max_health`, `minecraft:movement_speed`, `minecraft:attack_damage`, `minecraft:armor`, `minecraft:armor_toughness`, `minecraft:knockback_resistance`, `minecraft:follow_range`, `minecraft:jump_strength`, `minecraft:flying_speed`.
 
-Living entity'ler henüz spawn egg kullanmaz; `/summon <mod_id>:<name>` ile çağrılır. İsim `entity.<mod_id>.<name>` dil anahtarıyla çevrilir. Örnek: [Vex Sentinel](../examples/vex-sentinel/).
+Living entity'ler henüz spawn egg kullanmaz; `/summon <mod_id>:<name>` ile çağrılır. İsim `entity.<mod_id>.<name>` dil anahtarıyla çevrilir. Örnekler: [Vex Sentinel](../examples/vex-sentinel/) ve [Vex Wisp](../examples/vex-wisp/).
 
 **API sınırı:** Bu, vanilla archetype tabanlı yaşayan entity API'sidir; tamamen yeni AI API'si değildir. Modlar henüz kendi goal sınıflarını, hedef seçicilerini, pathfinding algoritmalarını, tick/event callback'lerini, model iskeletlerini veya animasyon controller'larını tanımlayamaz. Entity seçtiği vanilla template'in AI ve görsel davranışını kullanır.
 
