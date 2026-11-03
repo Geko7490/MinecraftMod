@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated": "2026-11-02T18:27:12.574323Z",
+  "generated": "2026-11-03T09:05:24.047186Z",
   "mods": [
     {
       "id": "ruby",
@@ -10,17 +10,25 @@
       "type": "hmod",
       "category": "items",
       "featured": false,
-      "tags": ["ruby", "items", "blocks"],
+      "tags": [
+        "ruby",
+        "items",
+        "blocks"
+      ],
       "screenshots": [],
       "icon": null,
       "source": "https://github.com/Geko7490/MinecraftMod",
       "versions": [
         {
           "version": "0.1.0",
-          "game_versions": ["26.3"],
+          "game_versions": [
+            "26.3"
+          ],
           "api": "0.2",
           "side": "both",
-          "capabilities": ["registries"],
+          "capabilities": [
+            "registries"
+          ],
           "download_url": "https://github.com/Geko7490/MinecraftMod/releases/download/v0.1.0/ruby-0.1.0.hmod",
           "file_name": "ruby-0.1.0.hmod",
           "size": 3688,
@@ -30,6 +38,126 @@
         }
       ],
       "license": "MIT"
+    },
+    {
+      "id": "vex_sentinel",
+      "name": "Vex Sentinel",
+      "description": "Experimental summonable zombie-archetype sentinel with 40 health, 7 attack damage and 4 armor.",
+      "developer": "Geko7490",
+      "type": "hmod",
+      "source": "https://github.com/Geko7490/MinecraftMod/tree/main/examples/vex-sentinel",
+      "versions": [
+        {
+          "version": "0.1.0",
+          "game_versions": [
+            "26.3"
+          ],
+          "api": "0.2",
+          "side": "both",
+          "capabilities": [
+            "registries"
+          ],
+          "download_url": "https://github.com/Geko7490/MinecraftMod/releases/download/vex-sentinel-0.1.0/vex_sentinel-0.1.0.hmod",
+          "file_name": "vex_sentinel-0.1.0.hmod",
+          "size": 1007,
+          "sha256": "656622091e5911af57f0bed05a69040cd4800e0ffb32974081983d9cefb57200",
+          "published": "2026-11-03T09:05:23.288788Z",
+          "changelog": "Experimental HMOD release. Runtime behavior still requires in-game verification."
+        }
+      ],
+      "license": "MIT",
+      "icon": null,
+      "category": "experimental",
+      "featured": false,
+      "tags": [
+        "experimental",
+        "entity",
+        "living-mob",
+        "zombie",
+        "combat",
+        "example"
+      ],
+      "screenshots": []
+    },
+    {
+      "id": "vex_spark",
+      "name": "Vex Spark",
+      "description": "Experimental throwable Spark Core projectile that deals 4 damage on hit.",
+      "developer": "Geko7490",
+      "type": "hmod",
+      "source": "https://github.com/Geko7490/MinecraftMod/tree/main/examples/vex-spark",
+      "versions": [
+        {
+          "version": "0.1.0",
+          "game_versions": [
+            "26.3"
+          ],
+          "api": "0.2",
+          "side": "both",
+          "capabilities": [
+            "registries"
+          ],
+          "download_url": "https://github.com/Geko7490/MinecraftMod/releases/download/vex-spark-0.1.0/vex_spark-0.1.0.hmod",
+          "file_name": "vex_spark-0.1.0.hmod",
+          "size": 1193,
+          "sha256": "49aca1152531b05c735e488b9ce17454a34c99d9867d8befeec6cae8166d4e2f",
+          "published": "2026-11-03T09:05:22.461718Z",
+          "changelog": "Experimental HMOD release. Runtime behavior still requires in-game verification."
+        }
+      ],
+      "license": "MIT",
+      "icon": null,
+      "category": "experimental",
+      "featured": false,
+      "tags": [
+        "experimental",
+        "entity",
+        "projectile",
+        "combat",
+        "example"
+      ],
+      "screenshots": []
+    },
+    {
+      "id": "vex_wisp",
+      "name": "Vex Wisp",
+      "description": "Experimental summonable flying Vex archetype with custom health, attack damage, follow range and flying speed.",
+      "developer": "Geko7490",
+      "type": "hmod",
+      "source": "https://github.com/Geko7490/MinecraftMod/tree/main/examples/vex-wisp",
+      "versions": [
+        {
+          "version": "0.1.0",
+          "game_versions": [
+            "26.3"
+          ],
+          "api": "0.2",
+          "side": "both",
+          "capabilities": [
+            "registries"
+          ],
+          "download_url": "https://github.com/Geko7490/MinecraftMod/releases/download/vex-wisp-0.1.0/vex_wisp-0.1.0.hmod",
+          "file_name": "vex_wisp-0.1.0.hmod",
+          "size": 777,
+          "sha256": "4f87103aefd10468582e79125ec3659920dfa5122c70b9312f4cbd313c25526c",
+          "published": "2026-11-03T09:05:24.047170Z",
+          "changelog": "Experimental HMOD release. Runtime behavior still requires in-game verification."
+        }
+      ],
+      "license": "MIT",
+      "icon": null,
+      "category": "experimental",
+      "featured": false,
+      "tags": [
+        "experimental",
+        "entity",
+        "living-mob",
+        "vex",
+        "flying",
+        "hostile",
+        "example"
+      ],
+      "screenshots": []
     }
   ]
 }
