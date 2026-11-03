@@ -32,6 +32,15 @@ def fail(message: str) -> None:
     raise SystemExit(f"Release publication failed: {message}")
 
 
+def should_index_mod(known: dict, mod_id: str, metadata: dict) -> bool:
+    enabled = metadata.get("catalog_enabled", True)
+    if not isinstance(enabled, bool):
+        fail(f"{mod_id}: catalog_enabled must be boolean")
+    if not enabled:
+        known.pop(mod_id, None)
+    return enabled
+
+
 def load_json(path: Path):
     try:
         return json.loads(path.read_text(encoding="utf-8"))
@@ -130,11 +139,7 @@ def main() -> None:
             fail(f"release contains duplicate asset for {mod_id}@{version}")
         processed.add(identity)
 
-        catalog_enabled = metadata.get("catalog_enabled", True)
-        if not isinstance(catalog_enabled, bool):
-            fail(f"{mod_id}: catalog_enabled must be boolean")
-        if not catalog_enabled:
-            known.pop(mod_id, None)
+        if not should_index_mod(known, mod_id, metadata):
             print(f"Validated {package.name}; {mod_id} remains hidden until catalog_enabled is true.")
             continue
 
