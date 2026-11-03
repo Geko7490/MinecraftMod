@@ -1,12 +1,13 @@
 {
   "id": "vex_spark",
   "name": "Vex Spark",
-  "description": "Adds a throwable Spark Core projectile that deals 4 damage on hit.",
+  "description": "Experimental throwable Spark Core projectile that deals 4 damage on hit.",
   "developer": "Geko7490",
   "type": "hmod",
-  "category": "gameplay",
+  "category": "experimental",
   "featured": false,
   "tags": [
+    "experimental",
     "entity",
     "projectile",
     "combat",
