@@ -21,7 +21,9 @@ Open Horizon Android → Mods to browse, inspect and install official HMOD conte
 
 Create a content mod, build its .hmod, add metadata at **mods/<id>/mod.json**, and publish a GitHub Release asset named **<id>-<version>.hmod**. The release workflow validates the package, calculates SHA-256 and exact size, preserves earlier versions, and updates **catalog/mods.json**.
 
-See [Modding guide](docs/MODDING.md), [Publishing guide](docs/PUBLISHING.md), [Ruby content example](examples/ruby-content/), and [Vex Spark projectile example](examples/vex-spark/), and [Vex Sentinel living entity example](examples/vex-sentinel/) and [Vex Wisp flying living entity example](examples/vex-wisp/).
+See [Modding guide](docs/MODDING.md), [Publishing guide](docs/PUBLISHING.md), [Ruby content example](examples/ruby-content/), [Vex Spark projectile example](examples/vex-spark/), [Vex Sentinel living entity example](examples/vex-sentinel/) and [Vex Wisp flying living entity example](examples/vex-wisp/).
+
+Vex Sentinel demonstrates declarative mob AI, which is being integrated in the Android client. Its metadata sets `catalog_enabled` to `false`, so the release is validated but hidden from players until the client parser and runtime support it.
 
 ## Entity types
 
