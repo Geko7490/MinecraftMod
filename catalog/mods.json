@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated": "2026-11-03T09:05:24.047186Z",
+  "generated": "2026-11-03T20:04:27Z",
   "mods": [
     {
       "id": "ruby",
@@ -38,46 +38,6 @@
         }
       ],
       "license": "MIT"
-    },
-    {
-      "id": "vex_sentinel",
-      "name": "Vex Sentinel",
-      "description": "Experimental summonable zombie-archetype sentinel with 40 health, 7 attack damage and 4 armor.",
-      "developer": "Geko7490",
-      "type": "hmod",
-      "source": "https://github.com/Geko7490/MinecraftMod/tree/main/examples/vex-sentinel",
-      "versions": [
-        {
-          "version": "0.1.0",
-          "game_versions": [
-            "26.3"
-          ],
-          "api": "0.2",
-          "side": "both",
-          "capabilities": [
-            "registries"
-          ],
-          "download_url": "https://github.com/Geko7490/MinecraftMod/releases/download/vex-sentinel-0.1.0/vex_sentinel-0.1.0.hmod",
-          "file_name": "vex_sentinel-0.1.0.hmod",
-          "size": 1007,
-          "sha256": "656622091e5911af57f0bed05a69040cd4800e0ffb32974081983d9cefb57200",
-          "published": "2026-11-03T09:05:23.288788Z",
-          "changelog": "Experimental HMOD release. Runtime behavior still requires in-game verification."
-        }
-      ],
-      "license": "MIT",
-      "icon": null,
-      "category": "experimental",
-      "featured": false,
-      "tags": [
-        "experimental",
-        "entity",
-        "living-mob",
-        "zombie",
-        "combat",
-        "example"
-      ],
-      "screenshots": []
     },
     {
       "id": "vex_spark",
