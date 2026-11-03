@@ -72,7 +72,7 @@ def build(source: Path, output: Path) -> Path:
         "minecraft:zombie", "minecraft:skeleton", "minecraft:cow",
         "minecraft:pig", "minecraft:sheep", "minecraft:chicken",
         "minecraft:spider", "minecraft:creeper", "minecraft:wolf",
-        "minecraft:iron_golem",
+        "minecraft:iron_golem", "minecraft:vex",
     }
     living_attributes = {
         "minecraft:max_health", "minecraft:movement_speed",
