@@ -1,12 +1,45 @@
 {
   "schema": 1,
   "categories": [
-    {"id": "blocks", "name": "Blocks", "description": "New blocks and building materials."},
-    {"id": "gameplay", "name": "Gameplay", "description": "Changes to gameplay and progression."},
-    {"id": "items", "name": "Items", "description": "New items, tools and equipment."},
-    {"id": "quality-of-life", "name": "Quality of Life", "description": "Convenience improvements."},
-    {"id": "utility", "name": "Utility", "description": "Useful gameplay utilities."},
-    {"id": "visual", "name": "Visual", "description": "Visual and presentation additions."},
-    {"id": "experimental", "name": "Experimental", "description": "Experimental content mods."}
+    {
+      "id": "blocks",
+      "name": "Blocks",
+      "description": "New blocks and building materials."
+    },
+    {
+      "id": "gameplay",
+      "name": "Gameplay",
+      "description": "Changes to gameplay and progression."
+    },
+    {
+      "id": "items",
+      "name": "Items",
+      "description": "New items, tools and equipment."
+    },
+    {
+      "id": "quality-of-life",
+      "name": "Quality of Life",
+      "description": "Convenience improvements."
+    },
+    {
+      "id": "utility",
+      "name": "Utility",
+      "description": "Useful gameplay utilities."
+    },
+    {
+      "id": "visual",
+      "name": "Visual",
+      "description": "Visual and presentation additions."
+    },
+    {
+      "id": "experimental",
+      "name": "Experimental",
+      "description": "Experimental content mods."
+    },
+    {
+      "id": "mobs",
+      "name": "Mobs",
+      "description": "Living entities, creatures and hostile mobs."
+    }
   ]
 }

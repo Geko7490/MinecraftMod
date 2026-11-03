@@ -1,0 +1,51 @@
+name: Build and publish living entity examples
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "examples/vex-sentinel/**"
+      - "examples/vex-wisp/**"
+      - ".github/workflows/build-living-examples.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: living-entity-example-releases
+  cancel-in-progress: false
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build Vex Sentinel
+        run: python scripts/build_hmod.py --source examples/vex-sentinel --output target/horizon-mod/vex_sentinel.hmod
+      - name: Build Vex Wisp
+        run: python scripts/build_hmod.py --source examples/vex-wisp --output target/horizon-mod/vex_wisp.hmod
+      - name: Publish immutable living entity releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          publish_example() {
+            DIR="$1"
+            ID="$2"
+            VERSION="$(python -c 'import sys,tomllib; print(tomllib.load(open(sys.argv[1], "rb"))["version"])' "examples/$DIR/horizon-mod.toml")"
+            TAG="$DIR-$VERSION"
+            if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+              echo "Release $TAG already exists; bump the example version." >&2
+              exit 1
+            fi
+            cp "target/horizon-mod/$ID.hmod" "target/horizon-mod/$ID-$VERSION.hmod"
+            gh release create "$TAG" "target/horizon-mod/$ID-$VERSION.hmod" \
+              --repo "$GITHUB_REPOSITORY" \
+              --title "$DIR $VERSION" \
+              --notes "Horizon living EntityType archetype example. The catalogue workflow validates the HMOD, calculates SHA-256 and indexes the release asset."
+          }
+          publish_example vex-sentinel vex_sentinel
+          publish_example vex-wisp vex_wisp

@@ -1,0 +1,5 @@
+{
+  "template": "minecraft:snowball",
+  "item": "vex_spark:core",
+  "damage": 4.0
+}

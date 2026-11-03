@@ -1,0 +1,22 @@
+{
+  "id": "vex_spark",
+  "name": "Vex Spark",
+  "description": "Adds a throwable Spark Core projectile that deals 4 damage on hit.",
+  "developer": "Geko7490",
+  "type": "hmod",
+  "category": "gameplay",
+  "featured": false,
+  "tags": [
+    "entity",
+    "projectile",
+    "combat",
+    "example"
+  ],
+  "screenshots": [],
+  "icon": null,
+  "source": "https://github.com/Geko7490/MinecraftMod/tree/main/examples/vex-spark",
+  "license": "MIT",
+  "game_versions": [
+    "26.3"
+  ]
+}

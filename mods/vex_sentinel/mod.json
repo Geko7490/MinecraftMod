@@ -1,0 +1,15 @@
+{
+  "id": "vex_sentinel",
+  "name": "Vex Sentinel",
+  "description": "Adds a summonable zombie-archetype sentinel with 40 health, 7 attack damage and 4 armor.",
+  "developer": "Geko7490",
+  "type": "hmod",
+  "category": "mobs",
+  "featured": false,
+  "tags": ["entity", "living-mob", "zombie", "combat", "example"],
+  "screenshots": [],
+  "icon": null,
+  "source": "https://github.com/Geko7490/MinecraftMod/tree/main/examples/vex-sentinel",
+  "license": "MIT",
+  "game_versions": ["26.3"]
+}

@@ -1,0 +1,8 @@
+id = "vex_sentinel"
+name = "Vex Sentinel"
+version = "0.1.0"
+description = "Adds a tougher summonable zombie-archetype sentinel."
+authors = ["Geko7490"]
+api = "0.2"
+side = "both"
+capabilities = ["registries"]

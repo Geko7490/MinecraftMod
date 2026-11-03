@@ -1,0 +1,8 @@
+id = "vex_spark"
+name = "Vex Spark"
+version = "0.1.0"
+description = "Adds a throwable Vex Spark projectile. Use the Spark Core item to throw it; it deals 4 damage on hit."
+authors = ["Geko7490"]
+api = "0.2"
+side = "both"
+capabilities = ["registries"]

@@ -31,7 +31,20 @@ jobs:
       - name: Validate official catalogue and metadata
         run: python scripts/validate_catalog.py
       - name: Build and validate Ruby example
-        run: python scripts/build_hmod.py
+        run: python scripts/build_hmod.py --source examples/ruby-content --output target/horizon-mod/ruby.hmod
+      - name: Build and validate Vex Spark entity example
+        run: python scripts/build_hmod.py --source examples/vex-spark --output target/horizon-mod/vex_spark.hmod
+      - name: Build and validate Vex Sentinel living entity example
+        run: python scripts/build_hmod.py --source examples/vex-sentinel --output target/horizon-mod/vex_sentinel.hmod
+      - name: Build and validate Vex Wisp flying living entity example
+        run: python scripts/build_hmod.py --source examples/vex-wisp --output target/horizon-mod/vex_wisp.hmod
+      - name: Upload validated example HMOD packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: horizon-example-hmods
+          path: target/horizon-mod/*.hmod
+          if-no-files-found: error
+          retention-days: 30
 
   publish:
     if: github.event_name == 'release'
