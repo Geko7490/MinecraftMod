@@ -75,6 +75,8 @@ def validate_metadata(metadata: dict, mod_id: str, category_ids: set[str]) -> No
         require(category in category_ids, f"{mod_id}: unknown category {category!r}")
     if "featured" in metadata:
         require(isinstance(metadata["featured"], bool), f"{mod_id}: featured must be boolean")
+    if "catalog_enabled" in metadata:
+        require(isinstance(metadata["catalog_enabled"], bool), f"{mod_id}: catalog_enabled must be boolean")
     for field in ("tags", "screenshots", "game_versions"):
         if field in metadata:
             require(isinstance(metadata[field], list), f"{mod_id}: {field} must be an array")
@@ -160,7 +162,10 @@ def main() -> None:
 
     for metadata_path in sorted(MODS_PATH.glob("*/mod.json")):
         mod_id = metadata_path.parent.name
-        validate_metadata(read_json(metadata_path), mod_id, category_ids)
+        metadata = read_json(metadata_path)
+        validate_metadata(metadata, mod_id, category_ids)
+        require(mod_id not in seen or metadata.get("catalog_enabled", True),
+                f"{mod_id}: catalog entry is disabled by metadata")
 
     require(seen <= {path.parent.name for path in MODS_PATH.glob("*/mod.json")},
             "catalog contains a mod without repository metadata")
