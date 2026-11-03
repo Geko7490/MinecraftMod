@@ -20,5 +20,6 @@
   "license": "MIT",
   "game_versions": [
     "26.3"
-  ]
+  ],
+  "catalog_enabled": false
 }
