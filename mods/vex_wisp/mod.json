@@ -1,0 +1,15 @@
+{
+  "id": "vex_wisp",
+  "name": "Vex Wisp",
+  "description": "Adds a summonable flying Vex archetype with custom health, attack damage, follow range and flying speed.",
+  "developer": "Geko7490",
+  "type": "hmod",
+  "category": "mobs",
+  "featured": false,
+  "tags": ["entity", "living-mob", "vex", "flying", "hostile", "example"],
+  "screenshots": [],
+  "icon": null,
+  "source": "https://github.com/Geko7490/MinecraftMod/tree/main/examples/vex-wisp",
+  "license": "MIT",
+  "game_versions": ["26.3"]
+}
