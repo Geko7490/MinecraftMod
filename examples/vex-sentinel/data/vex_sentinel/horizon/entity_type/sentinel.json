@@ -2,10 +2,55 @@
   "kind": "living",
   "template": "minecraft:zombie",
   "attributes": {
-    "minecraft:max_health": 40.0,
+    "minecraft:max_health": 40,
     "minecraft:movement_speed": 0.31,
-    "minecraft:attack_damage": 7.0,
-    "minecraft:follow_range": 32.0,
-    "minecraft:armor": 4.0
+    "minecraft:attack_damage": 7,
+    "minecraft:follow_range": 32,
+    "minecraft:armor": 4
+  },
+  "ai": {
+    "mode": "replace",
+    "goals": [
+      {
+        "type": "float",
+        "priority": 0
+      },
+      {
+        "type": "melee_attack",
+        "priority": 2,
+        "speed": 1.1,
+        "follow_unseen": true,
+        "interval": 16
+      },
+      {
+        "type": "stroll",
+        "priority": 5,
+        "speed": 0.85,
+        "avoid_water": true
+      },
+      {
+        "type": "look_at_player",
+        "priority": 6,
+        "range": 12,
+        "probability": 0.05
+      },
+      {
+        "type": "random_look_around",
+        "priority": 7
+      }
+    ],
+    "targets": [
+      {
+        "type": "hurt_by",
+        "priority": 1,
+        "alert": true
+      },
+      {
+        "type": "nearest_player",
+        "priority": 2,
+        "must_see": false,
+        "interval": 8
+      }
+    ]
   }
 }
