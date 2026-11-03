@@ -82,6 +82,7 @@ def main() -> None:
         fail("release contains no .hmod assets")
 
     processed: set[tuple[str, str]] = set()
+    published = 0
     for package in assets:
         manifest, data = read_package(package)
         mod_id = manifest.get("id", "")
@@ -129,6 +130,14 @@ def main() -> None:
             fail(f"release contains duplicate asset for {mod_id}@{version}")
         processed.add(identity)
 
+        catalog_enabled = metadata.get("catalog_enabled", True)
+        if not isinstance(catalog_enabled, bool):
+            fail(f"{mod_id}: catalog_enabled must be boolean")
+        if not catalog_enabled:
+            known.pop(mod_id, None)
+            print(f"Validated {package.name}; {mod_id} remains hidden until catalog_enabled is true.")
+            continue
+
         entry = known.setdefault(mod_id, {
             "id": mod_id,
             "name": metadata["name"],
@@ -173,11 +182,12 @@ def main() -> None:
         entry["versions"] = [item for item in entry["versions"] if item["version"] != version]
         entry["versions"].append(release)
         entry["versions"].sort(key=lambda item: item["published"], reverse=True)
+        published += 1
 
     catalog["mods"] = sorted(known.values(), key=lambda item: item["id"])
     catalog["generated"] = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
     CATALOG.write_text(json.dumps(catalog, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"Published {len(processed)} mod version(s) into {CATALOG.relative_to(ROOT)}")
+    print(f"Indexed {published} mod version(s); validated {len(processed)} package(s).")
 
 
 if __name__ == "__main__":
