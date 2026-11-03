@@ -32,10 +32,11 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
-          for MOD in vex-sentinel vex-wisp; do
-            ID="${MOD//-/_}"
-            VERSION="$(python -c 'import sys,tomllib; print(tomllib.load(open(sys.argv[1], "rb"))["version"])' "examples/$ID/horizon-mod.toml")"
-            TAG="$MOD-$VERSION"
+          publish_example() {
+            DIR="$1"
+            ID="$2"
+            VERSION="$(python -c 'import sys,tomllib; print(tomllib.load(open(sys.argv[1], "rb"))["version"])' "examples/$DIR/horizon-mod.toml")"
+            TAG="$DIR-$VERSION"
             if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
               echo "Release $TAG already exists; bump the example version." >&2
               exit 1
@@ -43,6 +44,8 @@ jobs:
             cp "target/horizon-mod/$ID.hmod" "target/horizon-mod/$ID-$VERSION.hmod"
             gh release create "$TAG" "target/horizon-mod/$ID-$VERSION.hmod" \
               --repo "$GITHUB_REPOSITORY" \
-              --title "$ID $VERSION" \
+              --title "$DIR $VERSION" \
               --notes "Horizon living EntityType archetype example. The catalogue workflow validates the HMOD, calculates SHA-256 and indexes the release asset."
-          done
+          }
+          publish_example vex-sentinel vex_sentinel
+          publish_example vex-wisp vex_wisp
