@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "crystal_blocks:crystal_block",
+    "crystal_blocks:crystal_stairs"
+  ]
+}

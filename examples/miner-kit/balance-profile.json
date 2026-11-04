@@ -1,0 +1,5 @@
+{
+  "template": "miner_kit",
+  "profile": "balanced",
+  "configuration": "build-time"
+}

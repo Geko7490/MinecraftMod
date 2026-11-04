@@ -1,0 +1,8 @@
+{
+  "title": "Hayatta Kalma Temelleri",
+  "icon": "survival_basics:field_pickaxe",
+  "items": [
+    "survival_basics:field_pickaxe",
+    "survival_basics:supply_token"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "C  ",
+    "CC ",
+    "CCC"
+  ],
+  "key": {
+    "C": "crystal_blocks:crystal_block"
+  },
+  "result": {
+    "id": "crystal_blocks:crystal_stairs",
+    "count": 4
+  }
+}

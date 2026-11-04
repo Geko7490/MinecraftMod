@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "crystal_blocks:block/crystal_stairs"
+  }
+}

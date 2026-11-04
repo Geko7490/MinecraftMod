@@ -1,0 +1,5 @@
+{
+  "template": "copper_processing",
+  "profile": "balanced",
+  "configuration": "build-time"
+}

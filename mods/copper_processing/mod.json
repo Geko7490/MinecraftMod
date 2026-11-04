@@ -1,0 +1,21 @@
+{
+  "id": "copper_processing",
+  "name": "Bakır İşleme",
+  "description": "HMOD API 0.2 example: copper_processing. In-game acceptance pending.",
+  "developer": "Geko7490",
+  "type": "hmod",
+  "category": "experimental",
+  "catalog_enabled": false,
+  "featured": false,
+  "tags": [
+    "example",
+    "content"
+  ],
+  "screenshots": [],
+  "icon": null,
+  "license": "MIT",
+  "source": "https://github.com/Geko7490/MinecraftMod",
+  "game_versions": [
+    "26.3"
+  ]
+}

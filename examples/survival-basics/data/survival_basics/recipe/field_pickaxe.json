@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CCC",
+    " S ",
+    " S "
+  ],
+  "key": {
+    "C": "minecraft:cobblestone",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "survival_basics:field_pickaxe",
+    "count": 1
+  }
+}

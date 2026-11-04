@@ -1,0 +1,8 @@
+{
+  "template": "minecraft:amethyst_block",
+  "properties": {
+    "hardness": 2.0,
+    "explosion_resistance": 6.0,
+    "requires_tool": true
+  }
+}

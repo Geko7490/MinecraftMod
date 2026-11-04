@@ -1,0 +1,5 @@
+{
+  "template": "crystal_blocks",
+  "profile": "balanced",
+  "configuration": "build-time"
+}

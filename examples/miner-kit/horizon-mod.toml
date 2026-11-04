@@ -1,0 +1,8 @@
+id = "miner_kit"
+name = "Madenci Seti"
+version = "1.0.0"
+description = "HMOD example: miner_kit; profile balanced"
+authors = ["Geko7490"]
+api = "0.2"
+side = "both"
+capabilities = ["registries"]

@@ -1,0 +1,7 @@
+[package]
+name = "example-hmod-check"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+horizon-mods = { git = "https://github.com/Geko7490/Minecraft", rev = "9f62a15b0ea063af06a4bd6a27b573171d1c0c02", default-features = false }

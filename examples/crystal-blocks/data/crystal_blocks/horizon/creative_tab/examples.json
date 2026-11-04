@@ -1,0 +1,8 @@
+{
+  "title": "Kristal Blokları",
+  "icon": "crystal_blocks:crystal_block",
+  "items": [
+    "crystal_blocks:crystal_block",
+    "crystal_blocks:crystal_stairs"
+  ]
+}

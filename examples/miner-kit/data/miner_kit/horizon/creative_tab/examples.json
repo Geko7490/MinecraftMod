@@ -1,0 +1,8 @@
+{
+  "title": "Madenci Seti",
+  "icon": "miner_kit:mining_helmet",
+  "items": [
+    "miner_kit:mining_helmet",
+    "miner_kit:mining_pickaxe"
+  ]
+}

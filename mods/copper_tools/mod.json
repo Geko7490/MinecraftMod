@@ -1,0 +1,21 @@
+{
+  "id": "copper_tools",
+  "name": "Bakır Araçlar",
+  "description": "HMOD API 0.2 example: copper_tools. In-game acceptance pending.",
+  "developer": "Geko7490",
+  "type": "hmod",
+  "category": "experimental",
+  "catalog_enabled": false,
+  "featured": false,
+  "tags": [
+    "example",
+    "content"
+  ],
+  "screenshots": [],
+  "icon": null,
+  "license": "MIT",
+  "source": "https://github.com/Geko7490/MinecraftMod",
+  "game_versions": [
+    "26.3"
+  ]
+}

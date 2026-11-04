@@ -53,3 +53,11 @@ Successful catalogue validation runs also upload the generated example packages 
 ## Catalogue compatibility
 
 The catalogue remains at schema version 1. New discovery fields (category, featured, tags, and screenshots) are optional so existing clients that ignore unknown JSON fields can continue to read the catalogue. Required package identity, compatibility, size and hash fields remain unchanged.
+
+## Mod development progression
+
+See [the implementation roadmap](docs/MOD_ROADMAP.md) for six new examples,
+build-time balance profiles, device acceptance criteria and release preparation.
+Create your own source with `python scripts/create_mod.py --help` and build every
+checked-in example with `python scripts/build_examples.py`. New samples remain
+hidden from the catalogue until their in-game acceptance checks are completed.

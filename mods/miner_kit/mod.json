@@ -1,0 +1,21 @@
+{
+  "id": "miner_kit",
+  "name": "Madenci Seti",
+  "description": "HMOD API 0.2 example: miner_kit. In-game acceptance pending.",
+  "developer": "Geko7490",
+  "type": "hmod",
+  "category": "experimental",
+  "catalog_enabled": false,
+  "featured": false,
+  "tags": [
+    "example",
+    "content"
+  ],
+  "screenshots": [],
+  "icon": null,
+  "license": "MIT",
+  "source": "https://github.com/Geko7490/MinecraftMod",
+  "game_versions": [
+    "26.3"
+  ]
+}

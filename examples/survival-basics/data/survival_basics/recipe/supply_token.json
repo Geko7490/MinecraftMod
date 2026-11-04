@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPP"
+  ],
+  "key": {
+    "P": "minecraft:paper"
+  },
+  "result": {
+    "id": "survival_basics:supply_token",
+    "count": 3
+  }
+}
